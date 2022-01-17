@@ -1,4 +1,8 @@
-﻿using System.Drawing;
+﻿
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace rubikmemr
 {
@@ -284,7 +288,7 @@ namespace rubikmemr
             var rot6 = State[(int)Face.Right, 6];
             var rot7 = State[(int)Face.Right, 7];
             var rot8 = State[(int)Face.Right, 8];
-            
+
             // up
             State[(int)Face.Up, 2] = State[(int)Face.Front, 2];
             State[(int)Face.Up, 5] = State[(int)Face.Front, 5];
@@ -387,7 +391,7 @@ namespace rubikmemr
             var rot6 = State[(int)Face.Back, 6];
             var rot7 = State[(int)Face.Back, 7];
             var rot8 = State[(int)Face.Back, 8];
-            
+
             // right
             State[(int)Face.Right, 2] = State[(int)Face.Down, 8];
             State[(int)Face.Right, 5] = State[(int)Face.Down, 7];
@@ -472,7 +476,7 @@ namespace rubikmemr
         }
 
         #endregion
-        
+
         #region "D moves"
 
         public Cube D()
@@ -490,7 +494,7 @@ namespace rubikmemr
             var rot6 = State[(int)Face.Down, 6];
             var rot7 = State[(int)Face.Down, 7];
             var rot8 = State[(int)Face.Down, 8];
-            
+
             // front
             State[(int)Face.Front, 6] = State[(int)Face.Left, 6];
             State[(int)Face.Front, 7] = State[(int)Face.Left, 7];
@@ -539,7 +543,7 @@ namespace rubikmemr
             var rot6 = State[(int)Face.Down, 6];
             var rot7 = State[(int)Face.Down, 7];
             var rot8 = State[(int)Face.Down, 8];
-    
+
             // front
             State[(int)Face.Front, 6] = State[(int)Face.Right, 6];
             State[(int)Face.Front, 7] = State[(int)Face.Right, 7];
@@ -575,7 +579,7 @@ namespace rubikmemr
         }
 
         #endregion
-          
+
         #region "L moves"
 
         public Cube L()
@@ -593,7 +597,7 @@ namespace rubikmemr
             var rot6 = State[(int)Face.Left, 6];
             var rot7 = State[(int)Face.Left, 7];
             var rot8 = State[(int)Face.Left, 8];
-            
+
             // up
             State[(int)Face.Up, 0] = State[(int)Face.Back, 2];
             State[(int)Face.Up, 3] = State[(int)Face.Back, 5];
@@ -681,25 +685,90 @@ namespace rubikmemr
 
         #region "drawing'
 
-        public Image GetBitmap()
+        public void OutputBitmap()
         {
-            Image image = new Bitmap(2000, 1024);
+            using (Image image = new Image<Rgba32>(17 * SQ, 13 * SQ))
+            {
+                DrawSide(image, 1, 5, 1);
+                DrawSide(image, 5, 1, 0);
+                DrawSide(image, 5, 5, 2);
+                DrawSide(image, 5, 9, 5);
+                DrawSide(image, 9, 5, 3);
+                DrawSide(image, 13, 5, 4);
 
-            Graphics graph = Graphics.FromImage(image);
+                image.SaveAsPng("cube.png");
+            }
 
-            graph.Clear(System.Drawing.Color.Azure);
-
-            Pen pen = new Pen(Brushes.Black);
-
-            graph.DrawLines(pen, new Point[] { new Point(10, 10), new Point(800, 900) });
-
-            Rectangle rect = new Rectangle(100, 100, 300, 300);
-            graph.DrawRectangle(pen, rect);
-
-            image.Save("myImage.png", System.Drawing.Imaging.ImageFormat.Png);
-
-            return image;
         }
+
+        const int SQ = 50;
+
+        private SixLabors.ImageSharp.Color toIColor(Color c)
+        {
+            switch (c)
+            {
+                case Color.yellow:
+                    return SixLabors.ImageSharp.Color.Yellow;
+
+                case Color.blue:
+                    return SixLabors.ImageSharp.Color.Blue;
+
+                case Color.red:
+                    return SixLabors.ImageSharp.Color.Red;
+
+                case Color.green:
+                    return SixLabors.ImageSharp.Color.Green;
+
+                case Color.orange:
+                    return SixLabors.ImageSharp.Color.Orange;
+
+                case Color.white:
+                    return SixLabors.ImageSharp.Color.White;
+
+                default:
+                    return SixLabors.ImageSharp.Color.DeepPink;
+            }
+        }
+
+        private void DrawRectangle(Image img, int x, int y, Color c)
+        {
+            var rect = new Rectangle(x * SQ, y * SQ, SQ, SQ);
+            img.Mutate(ctx => ctx.Fill(toIColor(c), rect));
+        }
+
+        private void DrawSide(Image img, int x, int y, int side)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                var color = State[side, i];
+                var sx = i % 3;
+                var sy = (i - sx) / 3;
+                DrawRectangle(img, sx + x, sy + y, color);
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                img.Mutate(c => c.DrawLines(SixLabors.ImageSharp.Color.Black, 1.0f, linePoints(x, y + i, x + 3, y + i)));
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                img.Mutate(c => c.DrawLines(SixLabors.ImageSharp.Color.Black, 1.0f, linePoints(x + i, y, x + i, y + 3)));
+            }
+        }
+
+        private PointF[] linePoints(int x1, int y1, int x2, int y2)
+        {
+            var points = new PointF[2];
+            points[0] = new PointF(
+                x: (float)x1 * SQ,
+                y: (float)y1 * SQ);
+            points[1] = new PointF(
+                x: (float)x2 * SQ,
+                y: (float)y2 * SQ);
+            return points;
+        }
+
+
 
         #endregion
     }

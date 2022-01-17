@@ -39,8 +39,51 @@ namespace rubikmemr.Tests
             Assert.AreEqual(expectedState, cube.State);
         }
 
-        #region "special moves"
+        #region "scrambles"
 
+        [Test]
+        public void Scamble1_Test()
+        {
+            /*
+             * L2 U2 R2 U' B2 U' L2 R2 U B2 F2 U2 L' D B' L2 B U F' U' B
+             * https://cstimer.net/
+             * N4IgzgxgTg0gpgTwLIgFwBcoFc4BoToD2hANmGpjvpFAGInpogDaAOiAJYB2ADluu1xcsJEgF0Q1aABUEPOE259G+CKQhYARgtQgAxADMjegAwmDhzQFZDBgGx6ALAYCMegCZmQAXyA
+            */
+
+            var cube = new rubikmemr.Cube().
+                L().L().U().U().R().R().Up().B().B().Up().
+                L().L().R().R().U().B().B().F().F().U().U().
+                Lp().D().Bp().L().L().B().U().Fp().Up().B();
+          
+            cube.OutputBitmap();
+
+            var expectedState = new Color[,] {
+                { Color.orange, Color.blue, Color.blue,
+                  Color.yellow, Color.yellow, Color.green,
+                  Color.red, Color.white, Color.orange},
+                { Color.yellow, Color.blue, Color.white,
+                  Color.white, Color.blue, Color.yellow,
+                  Color.blue, Color.blue, Color.yellow},
+                { Color.green, Color.green, Color.yellow,
+                  Color.red, Color.red, Color.green,
+                  Color.green, Color.green, Color.green},
+                { Color.green, Color.red, Color.orange,
+                  Color.orange, Color.green, Color.orange,
+                  Color.orange, Color.blue, Color.yellow},
+                { Color.white, Color.orange, Color.blue,
+                  Color.white, Color.orange, Color.red,
+                  Color.red, Color.yellow, Color.white},
+                { Color.red, Color.yellow, Color.white,
+                  Color.red, Color.white, Color.white,
+                  Color.red, Color.orange, Color.blue}
+            };
+
+            Assert.AreEqual(expectedState, cube.State);
+        }
+
+        #endregion
+
+        #region "special moves"
 
         [Test]
         public void SexyMove_6_Default_Test()
@@ -55,7 +98,7 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(defaultCube.State, sexyCube.State);
         }
-   
+
 
         [Test]
         public void SexyMoveInvert_6_Default_Test()
@@ -70,9 +113,8 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(defaultCube.State, sexyCube.State);
         }
-   
-        #endregion
 
+        #endregion
 
         #region "F_Moves"
 
@@ -104,7 +146,7 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(expectedState, cube.State);
         }
-        
+
         [Test]
         public void Fprime_Test()
         {
@@ -133,14 +175,14 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(expectedState, cube.State);
         }
-                
+
         [Test]
         public void F_Fprime_Default_Test()
         {
             var defaultCube = new Cube();
-          
-            Assert.AreEqual(defaultCube.State,defaultCube.F().Fp().State);
-            Assert.AreEqual(defaultCube.State,defaultCube.Fp().F().State);
+
+            Assert.AreEqual(defaultCube.State, defaultCube.F().Fp().State);
+            Assert.AreEqual(defaultCube.State, defaultCube.Fp().F().State);
         }
 
 
@@ -177,7 +219,7 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(expectedState, cube.State);
         }
-        
+
         [Test]
         public void Uprime_Test()
         {
@@ -250,7 +292,7 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(expectedState, cube.State);
         }
-        
+
         [Test]
         public void Rprime_Test()
         {
@@ -324,7 +366,7 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(expectedState, cube.State);
         }
-        
+
         [Test]
         public void Bprime_Test()
         {
@@ -365,7 +407,7 @@ namespace rubikmemr.Tests
         }
 
         #endregion
-        
+
         #region "D moves"
 
         [Test]
@@ -396,7 +438,7 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(expectedState, cube.State);
         }
-        
+
         [Test]
         public void Dprime_Test()
         {
@@ -437,7 +479,7 @@ namespace rubikmemr.Tests
         }
 
         #endregion
-        
+
         #region "L moves"
 
         [Test]
@@ -468,7 +510,7 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(expectedState, cube.State);
         }
-        
+
         [Test]
         public void Lprime_Test()
         {
