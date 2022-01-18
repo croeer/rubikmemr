@@ -51,12 +51,9 @@ namespace rubikmemr.Tests
             */
 
             var cube = new rubikmemr.Cube().
-            F().Bp().R().B();// Lp().Rp().Up().Bp().Dp().Fp();
-            //L().L().U().U().R().R().Up().B().B().Up().
-            //L().L().R().R().U().B().B().F().F().U().U().
-            //Lp().D().Bp().L().L().B().U().Fp().Up().B();
-
-            cube.OutputBitmap();
+            L().L().U().U().R().R().Up().B().B().Up().
+            L().L().R().R().U().B().B().F().F().U().U().
+            Lp().D().Bp().L().L().B().U().Fp().Up().B();
 
             var expectedState = new Color[,] {
                 { Color.orange, Color.blue, Color.blue,
@@ -553,7 +550,6 @@ namespace rubikmemr.Tests
         }
 
         #endregion
-
 
         #region "composite moves"
 
