@@ -1,4 +1,5 @@
 ﻿
+using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
@@ -408,9 +409,9 @@ namespace rubikmemr
             State[(int)Face.Left, 6] = State[(int)Face.Up, 0];
 
             // up
-            State[(int)Face.Up, 2] = t1;
+            State[(int)Face.Up, 0] = t1;
             State[(int)Face.Up, 1] = t2;
-            State[(int)Face.Up, 0] = t3;
+            State[(int)Face.Up, 2] = t3;
 
             // rotate back ccw
             State[(int)Face.Back, 0] = rot6;
@@ -457,9 +458,9 @@ namespace rubikmemr
             State[(int)Face.Right, 8] = State[(int)Face.Up, 2];
 
             // up
-            State[(int)Face.Up, 0] = t1;
+            State[(int)Face.Up, 2] = t1;
             State[(int)Face.Up, 1] = t2;
-            State[(int)Face.Up, 2] = t3;
+            State[(int)Face.Up, 0] = t3;
 
             // rotate back cw
             State[(int)Face.Back, 0] = rot2;
@@ -599,9 +600,9 @@ namespace rubikmemr
             var rot8 = State[(int)Face.Left, 8];
 
             // up
-            State[(int)Face.Up, 0] = State[(int)Face.Back, 2];
+            State[(int)Face.Up, 0] = State[(int)Face.Back, 8];
             State[(int)Face.Up, 3] = State[(int)Face.Back, 5];
-            State[(int)Face.Up, 6] = State[(int)Face.Back, 8];
+            State[(int)Face.Up, 6] = State[(int)Face.Back, 2];
 
             // back
             State[(int)Face.Back, 2] = State[(int)Face.Down, 6];
@@ -609,9 +610,9 @@ namespace rubikmemr
             State[(int)Face.Back, 8] = State[(int)Face.Down, 0];
 
             // down
-            State[(int)Face.Down, 6] = State[(int)Face.Front, 0];
+            State[(int)Face.Down, 6] = State[(int)Face.Front, 6];
             State[(int)Face.Down, 3] = State[(int)Face.Front, 3];
-            State[(int)Face.Down, 0] = State[(int)Face.Front, 6];
+            State[(int)Face.Down, 0] = State[(int)Face.Front, 0];
 
             // front
             State[(int)Face.Front, 0] = t1;
@@ -687,16 +688,21 @@ namespace rubikmemr
 
         public void OutputBitmap()
         {
+            OutputBitmap(0);
+        }
+
+        public void OutputBitmap(int index)
+        {
             using (Image image = new Image<Rgba32>(17 * SQ, 13 * SQ))
             {
-                DrawSide(image, 1, 5, 1);
-                DrawSide(image, 5, 1, 0);
-                DrawSide(image, 5, 5, 2);
-                DrawSide(image, 5, 9, 5);
-                DrawSide(image, 9, 5, 3);
-                DrawSide(image, 13, 5, 4);
+                DrawSide(image, 1, 5, Face.Left);
+                DrawSide(image, 5, 1, Face.Up);
+                DrawSide(image, 5, 5, Face.Front);
+                DrawSide(image, 5, 9, Face.Down);
+                DrawSide(image, 9, 5, Face.Right);
+                DrawSide(image, 13, 5, Face.Back);
 
-                image.SaveAsPng("cube.png");
+                image.SaveAsPng($"cube{index}.png");
             }
 
         }
@@ -736,14 +742,18 @@ namespace rubikmemr
             img.Mutate(ctx => ctx.Fill(toIColor(c), rect));
         }
 
-        private void DrawSide(Image img, int x, int y, int side)
+        private void DrawSide(Image img, int x, int y, Face side)
         {
+            Font font = SystemFonts.CreateFont("Arial", 10);
+
             for (int i = 0; i < 9; i++)
             {
-                var color = State[side, i];
+                var color = State[(int)side, i];
                 var sx = i % 3;
                 var sy = (i - sx) / 3;
                 DrawRectangle(img, sx + x, sy + y, color);
+                img.Mutate(ctx => ctx.DrawText(i.ToString(), font, SixLabors.ImageSharp.Color.Black, new PointF(x: (float)(sx + x + 0.5) * SQ, y: (float)(sy + y + 0.5) * SQ)));
+
             }
 
             for (int i = 0; i < 4; i++)

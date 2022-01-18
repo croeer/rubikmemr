@@ -42,7 +42,7 @@ namespace rubikmemr.Tests
         #region "scrambles"
 
         [Test]
-        public void Scamble1_Test()
+        public void Scramble1_Test()
         {
             /*
              * L2 U2 R2 U' B2 U' L2 R2 U B2 F2 U2 L' D B' L2 B U F' U' B
@@ -51,10 +51,11 @@ namespace rubikmemr.Tests
             */
 
             var cube = new rubikmemr.Cube().
-                L().L().U().U().R().R().Up().B().B().Up().
-                L().L().R().R().U().B().B().F().F().U().U().
-                Lp().D().Bp().L().L().B().U().Fp().Up().B();
-          
+            F().Bp().R().B();// Lp().Rp().Up().Bp().Dp().Fp();
+            //L().L().U().U().R().R().Up().B().B().Up().
+            //L().L().R().R().U().B().B().F().F().U().U().
+            //Lp().D().Bp().L().L().B().U().Fp().Up().B();
+
             cube.OutputBitmap();
 
             var expectedState = new Color[,] {
@@ -95,6 +96,7 @@ namespace rubikmemr.Tests
             {
                 sexyCube.R().U().Rp().Up();
             }
+            sexyCube.OutputBitmap();
 
             Assert.AreEqual(defaultCube.State, sexyCube.State);
         }
@@ -548,6 +550,81 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(defaultCube.State, defaultCube.L().Lp().State);
             Assert.AreEqual(defaultCube.State, defaultCube.Lp().L().State);
+        }
+
+        #endregion
+
+
+        #region "composite moves"
+
+        [Test]
+        public void Superflip_Test()
+        {
+            var cube = new rubikmemr.Cube().
+                U().R().R().F().B().R().B().B().R().
+                U().U().L().B().B().R().Up().Dp().R().
+                R().F().Rp().L().B().B().U().U().F().F();
+
+            var expectedState = new Color[,] {
+                { Color.yellow, Color.orange, Color.yellow,
+                  Color.blue, Color.yellow, Color.green,
+                  Color.yellow, Color.red, Color.yellow},
+                { Color.blue, Color.yellow, Color.blue,
+                  Color.orange, Color.blue, Color.red,
+                  Color.blue, Color.white, Color.blue},
+                { Color.red, Color.yellow, Color.red,
+                  Color.blue, Color.red, Color.green,
+                  Color.red, Color.white, Color.red},
+                { Color.green, Color.yellow, Color.green,
+                  Color.red, Color.green, Color.orange,
+                  Color.green, Color.white, Color.green},
+                { Color.orange, Color.yellow, Color.orange,
+                  Color.green, Color.orange, Color.blue,
+                  Color.orange, Color.white, Color.orange},
+                { Color.white, Color.red, Color.white,
+                  Color.blue, Color.white, Color.green,
+                  Color.white, Color.orange, Color.white}
+            };
+
+            Assert.AreEqual(expectedState, cube.State);
+        }
+        
+        [Test]
+        public void R_U_Dp_Test()
+        {
+            var index = 0;
+            var cube = new rubikmemr.Cube().R();
+            index += 1;
+            cube.OutputBitmap(index);
+            cube.U();
+            index += 1;
+            cube.OutputBitmap(index);
+            cube.Dp();
+            index += 1;
+            cube.OutputBitmap(index);
+
+            var expectedState = new Color[,] {
+                { Color.yellow, Color.yellow, Color.yellow,
+                  Color.yellow, Color.yellow, Color.yellow,
+                  Color.red, Color.red, Color.red},
+                { Color.red, Color.red, Color.white,
+                  Color.blue, Color.blue, Color.blue,
+                  Color.red, Color.red, Color.white},
+                { Color.green, Color.green, Color.green,
+                  Color.red, Color.red, Color.white,
+                  Color.green, Color.green, Color.green},
+                { Color.yellow, Color.orange, Color.orange,
+                  Color.green, Color.green, Color.green,
+                  Color.yellow, Color.orange, Color.orange},
+                { Color.blue, Color.blue, Color.blue,
+                  Color.yellow, Color.orange, Color.orange,
+                  Color.blue, Color.blue, Color.blue},
+                { Color.orange, Color.orange, Color.orange,
+                  Color.white, Color.white, Color.white,
+                  Color.white, Color.white, Color.white}
+            };
+
+            Assert.AreEqual(expectedState, cube.State);
         }
 
         #endregion
