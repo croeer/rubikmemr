@@ -660,7 +660,7 @@ namespace rubikmemr.Tests
             var solver = new Solver(cube);
             var sideMeme = solver.SolveSides();
 
-            Assert.AreEqual("CD", sideMeme) ;
+            Assert.AreEqual("AQCIDEFLGXHRJPKNTOVSW", sideMeme) ;
         }
 
         [Test]
