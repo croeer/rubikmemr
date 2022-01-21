@@ -4,9 +4,21 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using System.Diagnostics;
 
 namespace rubikmemr
 {
+    [DebuggerDisplay("{Name} {color1} {color2}")]
+    public class Edge
+    {
+        public Color color1;
+        public Color color2;
+
+        public string Name = String.Empty;
+
+        public (Face face, int index) position1;
+        public (Face face, int index) position2;
+    }
 
     public enum Color
     {
@@ -31,10 +43,40 @@ namespace rubikmemr
     public class Cube
     {
         public Color[,] State;
+        HashSet<Edge> edges = new HashSet<Edge>();
+        ILookup<Tuple<Color, Color>, Edge> edgeToLetter;
+        ILookup<string, Edge> letterToEdge;
+
+        public IEnumerable<Edge> Edges => edges.ToArray();
 
         public Cube(Color[,] state)
         {
             this.State = state;
+            Setup();
+        }
+
+        public string EdgeToLetter(Color c1, Color c2)
+        {
+            return edgeToLetter[new Tuple<Color, Color>(c1, c2)].Single().Name;
+        }
+
+        public string EdgeToLetter(Edge edge)
+        {
+            return edgeToLetter[new Tuple<Color, Color>(edge.color1, edge.color2)].Single().Name;
+        }
+
+        public Edge InverseSide(Edge edge)
+        {
+            return edgeToLetter[new Tuple<Color, Color>(edge.color2, edge.color1)].Single();
+        }
+
+        public Edge LetterToEdge(string letter)
+        {
+            var tempSide = letterToEdge[letter].Single();
+            var color1 = State[(int)tempSide.position1.face, tempSide.position1.index];
+            var color2 = State[(int)tempSide.position2.face, tempSide.position2.index];
+
+            return edgeToLetter[new Tuple<Color, Color>(color1, color2)].Single();
         }
 
         /// <summary>
@@ -62,6 +104,54 @@ namespace rubikmemr
                   Color.white, Color.white, Color.white,
                   Color.white, Color.white, Color.white}
             };
+            Setup();
+        }
+
+        private void Setup()
+        {
+            SetupEdges();
+            SetupCorners();
+
+            edgeToLetter = edges.ToLookup(x => new Tuple<Color, Color>(x.color1, x.color2));
+            letterToEdge = edges.ToLookup(x => x.Name);
+        }
+
+        private void SetupCorners()
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void SetupEdges()
+        {
+            edges.Add(new Edge { color1 = Color.yellow, color2 = Color.orange, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1) });
+            edges.Add(new Edge { color1 = Color.yellow, color2 = Color.green, Name = "B", position1 = (Face.Up, 5), position2 = (Face.Right, 1) });
+            edges.Add(new Edge { color1 = Color.yellow, color2 = Color.red, Name = "C", position1 = (Face.Up, 7), position2 = (Face.Front, 1) });
+            edges.Add(new Edge { color1 = Color.yellow, color2 = Color.blue, Name = "D", position1 = (Face.Up, 3), position2 = (Face.Left, 1) });
+
+            edges.Add(new Edge { color1 = Color.blue, color2 = Color.yellow, Name = "E", position1 = (Face.Left, 1), position2 = (Face.Up, 3) });
+            edges.Add(new Edge { color1 = Color.blue, color2 = Color.red, Name = "F", position1 = (Face.Left, 5), position2 = (Face.Front, 3) });
+            edges.Add(new Edge { color1 = Color.blue, color2 = Color.white, Name = "G", position1 = (Face.Left, 7), position2 = (Face.Down, 3) });
+            edges.Add(new Edge { color1 = Color.blue, color2 = Color.orange, Name = "H", position1 = (Face.Left, 3), position2 = (Face.Back, 5) });
+
+            edges.Add(new Edge { color1 = Color.red, color2 = Color.yellow, Name = "I", position1 = (Face.Front, 1), position2 = (Face.Up, 7) });
+            edges.Add(new Edge { color1 = Color.red, color2 = Color.green, Name = "J", position1 = (Face.Front, 5), position2 = (Face.Right, 3) });
+            edges.Add(new Edge { color1 = Color.red, color2 = Color.white, Name = "K", position1 = (Face.Front, 7), position2 = (Face.Down, 3) });
+            edges.Add(new Edge { color1 = Color.red, color2 = Color.blue, Name = "L", position1 = (Face.Front, 3), position2 = (Face.Left, 5) });
+
+            edges.Add(new Edge { color1 = Color.green, color2 = Color.yellow, Name = "M", position1 = (Face.Right, 1), position2 = (Face.Up, 5) });
+            edges.Add(new Edge { color1 = Color.green, color2 = Color.orange, Name = "N", position1 = (Face.Right, 5), position2 = (Face.Back, 3) });
+            edges.Add(new Edge { color1 = Color.green, color2 = Color.white, Name = "O", position1 = (Face.Right, 7), position2 = (Face.Down, 5) });
+            edges.Add(new Edge { color1 = Color.green, color2 = Color.red, Name = "P", position1 = (Face.Right, 3), position2 = (Face.Front, 5) });
+
+            edges.Add(new Edge { color1 = Color.orange, color2 = Color.yellow, Name = "Q", position1 = (Face.Back, 1), position2 = (Face.Up, 1) });
+            edges.Add(new Edge { color1 = Color.orange, color2 = Color.blue, Name = "R", position1 = (Face.Back, 5), position2 = (Face.Left, 3) });
+            edges.Add(new Edge { color1 = Color.orange, color2 = Color.white, Name = "S", position1 = (Face.Back, 7), position2 = (Face.Down, 7) });
+            edges.Add(new Edge { color1 = Color.orange, color2 = Color.green, Name = "T", position1 = (Face.Back, 3), position2 = (Face.Right, 5) });
+
+            edges.Add(new Edge { color1 = Color.white, color2 = Color.red, Name = "U", position1 = (Face.Down, 1), position2 = (Face.Front, 7) });
+            edges.Add(new Edge { color1 = Color.white, color2 = Color.green, Name = "V", position1 = (Face.Down, 5), position2 = (Face.Right, 7) });
+            edges.Add(new Edge { color1 = Color.white, color2 = Color.orange, Name = "W", position1 = (Face.Down, 7), position2 = (Face.Back, 7) });
+            edges.Add(new Edge { color1 = Color.white, color2 = Color.blue, Name = "X", position1 = (Face.Down, 3), position2 = (Face.Left, 7) });
         }
 
         #region "F moves"
@@ -708,6 +798,7 @@ namespace rubikmemr
         }
 
         const int SQ = 50;
+        private readonly IEnumerable<Edge> sides1;
 
         private SixLabors.ImageSharp.Color toIColor(Color c)
         {

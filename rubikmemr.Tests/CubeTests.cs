@@ -5,10 +5,6 @@ namespace rubikmemr.Tests
 {
     public class CubeTests
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
 
         [Test]
         public void DefaultCube_Test()
@@ -625,5 +621,80 @@ namespace rubikmemr.Tests
 
         #endregion
 
+        #region "letters"
+
+        [Test]
+        public void Letter_A_Test()
+        {
+            var cube = new rubikmemr.Cube();
+
+            Edge sideA = cube.LetterToEdge("A");
+            Assert.AreEqual((Face.Up,1), sideA.position1);
+            Assert.AreEqual(Color.yellow, sideA.color1);
+            Assert.AreEqual(Color.orange, sideA.color2);
+        }
+        #endregion
+
+        #region "Cycles"
+
+        [Test]
+        public void Uperm_Test()
+        {
+            var cube = new rubikmemr.Cube().
+                R().Up().R().U().R().U().R().Up().Rp().Up().Rp().Rp();
+
+            var solver = new Solver(cube);
+            var sideMeme = solver.SolveSides();
+
+            Assert.AreEqual("CD", sideMeme) ;
+        }
+
+        [Test]
+        public void Superflip_SideMeme_Test()
+        {
+            var cube = new rubikmemr.Cube().
+                U().R().R().F().B().R().B().B().R().
+                U().U().L().B().B().R().Up().Dp().R().
+                R().F().Rp().L().B().B().U().U().F().F();
+
+            var solver = new Solver(cube);
+            var sideMeme = solver.SolveSides();
+
+            Assert.AreEqual("CD", sideMeme) ;
+        }
+
+        [Test]
+        public void SolvedBufferPiece_Test()
+        {
+
+            var initialState = new Color[,] {
+                { Color.yellow, Color.yellow, Color.yellow,
+                  Color.yellow, Color.yellow, Color.yellow,
+                  Color.yellow, Color.yellow, Color.yellow},
+                { Color.blue, Color.orange, Color.blue,
+                  Color.blue, Color.blue, Color.blue,
+                  Color.blue, Color.blue, Color.blue},
+                { Color.red, Color.blue, Color.red,
+                  Color.red, Color.red, Color.red,
+                  Color.red, Color.red, Color.red},
+                { Color.green, Color.green, Color.green,
+                  Color.green, Color.green, Color.green,
+                  Color.green, Color.green, Color.green},
+                { Color.orange, Color.red, Color.orange,
+                  Color.orange, Color.orange, Color.orange,
+                  Color.orange, Color.orange, Color.orange},
+                { Color.white, Color.white, Color.white,
+                  Color.white, Color.white, Color.white,
+                  Color.white, Color.white, Color.white}
+            };
+
+            var cube = new rubikmemr.Cube(initialState);
+
+            var solver = new Solver(cube);
+            var sideMeme = solver.SolveSides();
+
+            Assert.AreEqual("ACD", sideMeme) ;
+        }
+        #endregion
     }
 }
