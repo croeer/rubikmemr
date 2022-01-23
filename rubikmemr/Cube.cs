@@ -20,6 +20,20 @@ namespace rubikmemr
         public (Face face, int index) position2;
     }
 
+    [DebuggerDisplay("{Name} {color1} {color2} {color3}")]
+    public class Corner
+    {
+        public Color color1;
+        public Color color2;
+        public Color color3;
+
+        public string Name = String.Empty;
+
+        public (Face face, int index) position1;
+        public (Face face, int index) position2;
+        public (Face face, int index) position3;
+    }
+
     public enum Color
     {
         yellow,
@@ -47,6 +61,28 @@ namespace rubikmemr
         ILookup<Tuple<Color, Color>, Edge> edgeToLetter;
         ILookup<string, Edge> letterToEdge;
 
+        HashSet<Corner> corners = new HashSet<Corner>();
+
+        public void TurnByString(string s)
+        {
+            s = s.Replace("'", "p");
+            var turns = s.Split(" ");
+            foreach (var turn in turns)
+            {
+                if (turn.Length == 2 && turn[1].Equals('2'))
+                {
+                    var theTurn = turn[0].ToString();
+                    typeof(Cube).GetMethod(theTurn)?.Invoke(this, null);
+                    typeof(Cube).GetMethod(theTurn)?.Invoke(this, null);
+                }
+                else
+                {
+                    typeof(Cube).GetMethod(turn)?.Invoke(this, null);
+                }
+            }
+
+        }
+
         public IEnumerable<Edge> Edges => edges.ToArray();
 
         public Cube(Color[,] state)
@@ -65,7 +101,7 @@ namespace rubikmemr
             return edgeToLetter[new Tuple<Color, Color>(edge.color1, edge.color2)].Single().Name;
         }
 
-        public Edge InverseSide(Edge edge)
+        public Edge InverseEdge(Edge edge)
         {
             return edgeToLetter[new Tuple<Color, Color>(edge.color2, edge.color1)].Single();
         }
@@ -116,11 +152,6 @@ namespace rubikmemr
             letterToEdge = edges.ToLookup(x => x.Name);
         }
 
-        private void SetupCorners()
-        {
-            //throw new NotImplementedException();
-        }
-
         private void SetupEdges()
         {
             edges.Add(new Edge { color1 = Color.yellow, color2 = Color.orange, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1) });
@@ -135,7 +166,7 @@ namespace rubikmemr
 
             edges.Add(new Edge { color1 = Color.red, color2 = Color.yellow, Name = "I", position1 = (Face.Front, 1), position2 = (Face.Up, 7) });
             edges.Add(new Edge { color1 = Color.red, color2 = Color.green, Name = "J", position1 = (Face.Front, 5), position2 = (Face.Right, 3) });
-            edges.Add(new Edge { color1 = Color.red, color2 = Color.white, Name = "K", position1 = (Face.Front, 7), position2 = (Face.Down, 3) });
+            edges.Add(new Edge { color1 = Color.red, color2 = Color.white, Name = "K", position1 = (Face.Front, 7), position2 = (Face.Down, 1) });
             edges.Add(new Edge { color1 = Color.red, color2 = Color.blue, Name = "L", position1 = (Face.Front, 3), position2 = (Face.Left, 5) });
 
             edges.Add(new Edge { color1 = Color.green, color2 = Color.yellow, Name = "M", position1 = (Face.Right, 1), position2 = (Face.Up, 5) });
@@ -152,6 +183,19 @@ namespace rubikmemr
             edges.Add(new Edge { color1 = Color.white, color2 = Color.green, Name = "V", position1 = (Face.Down, 5), position2 = (Face.Right, 7) });
             edges.Add(new Edge { color1 = Color.white, color2 = Color.orange, Name = "W", position1 = (Face.Down, 7), position2 = (Face.Back, 7) });
             edges.Add(new Edge { color1 = Color.white, color2 = Color.blue, Name = "X", position1 = (Face.Down, 3), position2 = (Face.Left, 7) });
+        }
+
+        private void SetupCorners()
+        {
+            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
+            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
+            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
+            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
+
+            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
+            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
+            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
+            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
         }
 
         #region "F moves"

@@ -15,9 +15,20 @@ namespace rubikmemr
             this.cube = cube;
         }
 
-        HashSet<Edge> visitedSides = new HashSet<Edge>();
+        #region "Corners"
 
-        public string SolveSides()
+        public string SolveCorners()
+        {
+            return String.Empty;
+        }
+
+        #endregion
+
+        #region "Edges"
+
+        HashSet<Edge> visitedEdges = new HashSet<Edge>();
+
+        public string SolveEdges()
         {
             var buffer = cube.LetterToEdge("B");
             Edge aktSide = buffer;
@@ -25,34 +36,39 @@ namespace rubikmemr
             if (cube.EdgeToLetter(buffer) == "M" || cube.EdgeToLetter(buffer) == "B")
             {
                 // get other starting piece
-                aktSide = GetUnsolvedSide();
+                aktSide = GetUnsolvedEdge();
             }
 
             do
             {
-                NewCycle(aktSide);
-                aktSide = GetUnsolvedSide();
+                NewEdgeCycle(aktSide);
+                aktSide = GetUnsolvedEdge();
 
             } while (aktSide is not null);
+
+            if (meme.Count() % 2 != 0)
+            {
+                Parity = true;
+            }
 
             return String.Join(String.Empty, meme.Reverse().ToArray());
         }
 
-        private Edge GetUnsolvedSide()
+        private Edge GetUnsolvedEdge()
         {
-            foreach(Edge tempSide in cube.Edges.Where(x => !visitedSides.Contains(x) && !cube.EdgeToLetter(x).Equals("B") && !cube.EdgeToLetter(x).Equals("M")))
+            foreach (Edge tempEdge in cube.Edges.Where(x => !visitedEdges.Contains(x) && !cube.EdgeToLetter(x).Equals("B") && !cube.EdgeToLetter(x).Equals("M")))
             {
-                var inverseSide = cube.InverseSide(tempSide);
-                if(visitedSides.Contains(inverseSide))
+                var inverseEdge = cube.InverseEdge(tempEdge);
+                if (visitedEdges.Contains(inverseEdge))
                 {
                     continue;
                 }
 
-                var color1 = cube.State[(int)tempSide.position1.face, tempSide.position1.index];
-                var color2 = cube.State[(int)tempSide.position2.face, tempSide.position2.index];
-                if(( color1 != tempSide.color1 || color2 != tempSide.color2 )) // && (color1 != tempSide.color2 || color2 != tempSide.color1))
+                var color1 = cube.State[(int)tempEdge.position1.face, tempEdge.position1.index];
+                var color2 = cube.State[(int)tempEdge.position2.face, tempEdge.position2.index];
+                if (color1 != tempEdge.color1 || color2 != tempEdge.color2)
                 {
-                    return tempSide;
+                    return tempEdge;
                 }
             }
 #pragma warning disable CS8603 // Possible null reference return.
@@ -60,24 +76,26 @@ namespace rubikmemr
 #pragma warning restore CS8603 // Possible null reference return.
         }
 
-        private void NewCycle(Edge start)
+        private void NewEdgeCycle(Edge start)
         {
             var aktSide = start;
             do
             {
-                visitedSides.Add(aktSide);
+                visitedEdges.Add(aktSide);
 
                 var letter = cube.EdgeToLetter(aktSide);
                 aktSide = cube.LetterToEdge(letter);
                 meme.Push(letter);
 
-            } while (!visitedSides.Contains(aktSide));
+            } while (!visitedEdges.Contains(aktSide));
 
-            if(meme.Peek() == "B")
+            if (meme.Peek() == "B")
             {
                 meme.Pop();
             }
         }
+
+        #endregion
 
     }
 }

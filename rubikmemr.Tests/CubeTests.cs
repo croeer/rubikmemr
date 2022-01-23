@@ -35,6 +35,54 @@ namespace rubikmemr.Tests
             Assert.AreEqual(expectedState, cube.State);
         }
 
+        #region "turn by string"
+
+
+        [Test]
+        public void String_R_Test()
+        {
+            var cube = new rubikmemr.Cube();
+
+            cube.TurnByString("R");
+
+            var expectedState = new Color[,] {
+                { Color.yellow, Color.yellow, Color.red,
+                  Color.yellow, Color.yellow, Color.red,
+                  Color.yellow, Color.yellow, Color.red},
+                { Color.blue, Color.blue, Color.blue,
+                  Color.blue, Color.blue, Color.blue,
+                  Color.blue, Color.blue, Color.blue},
+                { Color.red, Color.red, Color.white,
+                  Color.red, Color.red, Color.white,
+                  Color.red, Color.red, Color.white},
+                { Color.green, Color.green, Color.green,
+                  Color.green, Color.green, Color.green,
+                  Color.green, Color.green, Color.green},
+                { Color.yellow, Color.orange, Color.orange,
+                  Color.yellow, Color.orange, Color.orange,
+                  Color.yellow, Color.orange, Color.orange},
+                { Color.white, Color.white, Color.orange,
+                  Color.white, Color.white, Color.orange,
+                  Color.white, Color.white, Color.orange}
+            };
+
+            Assert.AreEqual(expectedState, cube.State);
+        }
+        
+        [Test]
+        public void String_R_U_D_Rp_D2_Test()
+        {
+            var cube1 = new rubikmemr.Cube();
+            cube1.TurnByString("R U D R' D2");
+
+            var cube2 = new rubikmemr.Cube().
+                R().U().D().Rp().D().D();
+
+            Assert.AreEqual(cube2.State, cube1.State);
+        }
+
+        #endregion
+
         #region "scrambles"
 
         [Test]
@@ -635,66 +683,5 @@ namespace rubikmemr.Tests
         }
         #endregion
 
-        #region "Cycles"
-
-        [Test]
-        public void Uperm_Test()
-        {
-            var cube = new rubikmemr.Cube().
-                R().Up().R().U().R().U().R().Up().Rp().Up().Rp().Rp();
-
-            var solver = new Solver(cube);
-            var sideMeme = solver.SolveSides();
-
-            Assert.AreEqual("CD", sideMeme) ;
-        }
-
-        [Test]
-        public void Superflip_SideMeme_Test()
-        {
-            var cube = new rubikmemr.Cube().
-                U().R().R().F().B().R().B().B().R().
-                U().U().L().B().B().R().Up().Dp().R().
-                R().F().Rp().L().B().B().U().U().F().F();
-
-            var solver = new Solver(cube);
-            var sideMeme = solver.SolveSides();
-
-            Assert.AreEqual("AQCIDEFLGXHRJPKNTOVSW", sideMeme) ;
-        }
-
-        [Test]
-        public void SolvedBufferPiece_Test()
-        {
-
-            var initialState = new Color[,] {
-                { Color.yellow, Color.yellow, Color.yellow,
-                  Color.yellow, Color.yellow, Color.yellow,
-                  Color.yellow, Color.yellow, Color.yellow},
-                { Color.blue, Color.orange, Color.blue,
-                  Color.blue, Color.blue, Color.blue,
-                  Color.blue, Color.blue, Color.blue},
-                { Color.red, Color.blue, Color.red,
-                  Color.red, Color.red, Color.red,
-                  Color.red, Color.red, Color.red},
-                { Color.green, Color.green, Color.green,
-                  Color.green, Color.green, Color.green,
-                  Color.green, Color.green, Color.green},
-                { Color.orange, Color.red, Color.orange,
-                  Color.orange, Color.orange, Color.orange,
-                  Color.orange, Color.orange, Color.orange},
-                { Color.white, Color.white, Color.white,
-                  Color.white, Color.white, Color.white,
-                  Color.white, Color.white, Color.white}
-            };
-
-            var cube = new rubikmemr.Cube(initialState);
-
-            var solver = new Solver(cube);
-            var sideMeme = solver.SolveSides();
-
-            Assert.AreEqual("ACD", sideMeme) ;
-        }
-        #endregion
     }
 }
