@@ -841,6 +841,25 @@ namespace rubikmemr
 
         }
 
+        public byte[] ToByteArray()
+        {
+            using (Image image = new Image<Rgba32>(17 * SQ, 13 * SQ))
+            {
+                DrawSide(image, 1, 5, Face.Left);
+                DrawSide(image, 5, 1, Face.Up);
+                DrawSide(image, 5, 5, Face.Front);
+                DrawSide(image, 5, 9, Face.Down);
+                DrawSide(image, 9, 5, Face.Right);
+                DrawSide(image, 13, 5, Face.Back);
+
+                using (var ms = new MemoryStream())
+                {
+                    image.Save(ms, new SixLabors.ImageSharp.Formats.Png.PngEncoder());
+                    return ms.ToArray();
+                }
+            }
+        }
+
         const int SQ = 50;
         private readonly IEnumerable<Edge> sides1;
 
