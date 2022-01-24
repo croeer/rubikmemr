@@ -906,7 +906,7 @@ namespace rubikmemr
                 var sx = i % 3;
                 var sy = (i - sx) / 3;
                 DrawRectangle(img, sx + x, sy + y, color);
-                img.Mutate(ctx => ctx.DrawText(i.ToString(), font, SixLabors.ImageSharp.Color.Black, new PointF(x: (float)(sx + x + 0.5) * SQ, y: (float)(sy + y + 0.5) * SQ)));
+                img.Mutate(ctx => ctx.DrawText(side.ToString().First().ToString(), font, SixLabors.ImageSharp.Color.Black, new PointF(x: (float)(sx + x + 0.5) * SQ, y: (float)(sy + y + 0.5) * SQ)));
 
             }
 
