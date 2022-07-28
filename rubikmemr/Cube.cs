@@ -83,6 +83,8 @@ namespace rubikmemr
 
         }
 
+        #region "edges"
+
         public IEnumerable<Edge> Edges => edges.ToArray();
 
         public Cube(Color[,] state)
@@ -114,6 +116,8 @@ namespace rubikmemr
 
             return edgeToLetter[new Tuple<Color, Color>(color1, color2)].Single();
         }
+
+        #endregion
 
         /// <summary>
         /// Default cube in solved state
@@ -187,15 +191,36 @@ namespace rubikmemr
 
         private void SetupCorners()
         {
-            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
-            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
-            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
-            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
+            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 0), position2 = (Face.Back, 2), position3 = (Face.Left, 0) });
+            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.green, color3 = Color.orange, Name = "B", position1 = (Face.Up, 1), position2 = (Face.Back, 0), position3 = (Face.Right, 2) });
+            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.green, color3 = Color.red, Name = "C", position1 = (Face.Up, 8), position2 = (Face.Right, 0), position3 = (Face.Front, 2) });
+            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.red, color3 = Color.blue, Name = "D", position1 = (Face.Up, 6), position2 = (Face.Front, 0), position3 = (Face.Left, 2) });
+          
+            corners.Add(new Corner { color1 = Color.blue, color2 = Color.orange, color3 = Color.yellow, Name = "E", position1 = (Face.Left, 0), position2 = (Face.Back, 2), position3 = (Face.Up, 0) });
+            corners.Add(new Corner { color1 = Color.blue, color2 = Color.yellow, color3 = Color.red, Name = "F", position1 = (Face.Left, 2), position2 = (Face.Up, 6), position3 = (Face.Front, 0) });
+            corners.Add(new Corner { color1 = Color.blue, color2 = Color.red, color3 = Color.white, Name = "G", position1 = (Face.Left, 8), position2 = (Face.Front, 6), position3 = (Face.Down, 0) });
+            corners.Add(new Corner { color1 = Color.blue, color2 = Color.white, color3 = Color.orange, Name = "H", position1 = (Face.Left, 6), position2 = (Face.Down, 6), position3 = (Face.Back, 6) });
+   
+            corners.Add(new Corner { color1 = Color.red, color2 = Color.blue, color3 = Color.yellow, Name = "I", position1 = (Face.Front, 0), position2 = (Face.Left, 2), position3 = (Face.Up, 6) });
+            corners.Add(new Corner { color1 = Color.red, color2 = Color.yellow, color3 = Color.green, Name = "J", position1 = (Face.Front, 2), position2 = (Face.Up, 8), position3 = (Face.Right, 0) });
+            corners.Add(new Corner { color1 = Color.red, color2 = Color.green, color3 = Color.white, Name = "K", position1 = (Face.Front, 8), position2 = (Face.Right, 6), position3 = (Face.Down, 2) });
+            corners.Add(new Corner { color1 = Color.red, color2 = Color.white, color3 = Color.blue, Name = "L", position1 = (Face.Front, 6), position2 = (Face.Down, 0), position3 = (Face.Left, 8) });
+   
+            corners.Add(new Corner { color1 = Color.green, color2 = Color.red, color3 = Color.yellow, Name = "M", position1 = (Face.Right, 0), position2 = (Face.Front, 2), position3 = (Face.Up, 8) });
+            corners.Add(new Corner { color1 = Color.green, color2 = Color.yellow, color3 = Color.orange, Name = "N", position1 = (Face.Right, 2), position2 = (Face.Up, 2), position3 = (Face.Back, 0) });
+            corners.Add(new Corner { color1 = Color.green, color2 = Color.orange, color3 = Color.white, Name = "O", position1 = (Face.Right, 8), position2 = (Face.Back, 6), position3 = (Face.Down, 8) });
+            corners.Add(new Corner { color1 = Color.green, color2 = Color.white, color3 = Color.red, Name = "P", position1 = (Face.Right, 6), position2 = (Face.Down, 2), position3 = (Face.Front, 8) });
+  
+            corners.Add(new Corner { color1 = Color.orange, color2 = Color.green, color3 = Color.yellow, Name = "Q", position1 = (Face.Back, 0), position2 = (Face.Right, 2), position3 = (Face.Up, 2) });
+            corners.Add(new Corner { color1 = Color.orange, color2 = Color.yellow, color3 = Color.blue, Name = "R", position1 = (Face.Back, 2), position2 = (Face.Up, 0), position3 = (Face.Left, 0) });
+            corners.Add(new Corner { color1 = Color.orange, color2 = Color.blue, color3 = Color.white, Name = "S", position1 = (Face.Back, 8), position2 = (Face.Left, 6), position3 = (Face.Down, 6) });
+            corners.Add(new Corner { color1 = Color.orange, color2 = Color.white, color3 = Color.green, Name = "T", position1 = (Face.Back, 6), position2 = (Face.Down, 8), position3 = (Face.Right, 8) });
+  
+            corners.Add(new Corner { color1 = Color.white, color2 = Color.orange, color3 = Color.blue, Name = "U", position1 = (Face.Down, 0), position2 = (Face.Left, 8), position3 = (Face.Front, 6) });
+            corners.Add(new Corner { color1 = Color.white, color2 = Color.blue, color3 = Color.red, Name = "V", position1 = (Face.Down, 2), position2 = (Face.Front, 8), position3 = (Face.Right, 6) });
+            corners.Add(new Corner { color1 = Color.white, color2 = Color.red, color3 = Color.green, Name = "W", position1 = (Face.Down, 8), position2 = (Face.Right, 8), position3 = (Face.Back, 6) });
+            corners.Add(new Corner { color1 = Color.white, color2 = Color.green, color3 = Color.orange, Name = "X", position1 = (Face.Down, 6), position2 = (Face.Back, 8), position3 = (Face.Left, 6) });
 
-            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
-            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
-            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
-            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 1), position2 = (Face.Back, 1), position3 = (Face.Left, 1) });
         }
 
         #region "F moves"
@@ -930,6 +955,16 @@ namespace rubikmemr
                 x: (float)x2 * SQ,
                 y: (float)y2 * SQ);
             return points;
+        }
+
+        public Corner LetterToCorner(string letter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string CornerToLetter(Corner buffer)
+        {
+            throw new NotImplementedException();
         }
 
 

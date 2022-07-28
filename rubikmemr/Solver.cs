@@ -8,7 +8,8 @@ namespace rubikmemr
 
         public bool Parity;
 
-        Stack<string> meme = new Stack<string>();
+        Stack<string> edgeMeme = new Stack<string>();
+        Stack<string> cornerMeme = new Stack<string>();
 
         public Solver(Cube cube)
         {
@@ -19,7 +20,33 @@ namespace rubikmemr
 
         public string SolveCorners()
         {
-            return String.Empty;
+            var buffer = cube.LetterToCorner("P");
+            Corner aktCorner = buffer;
+
+            if (cube.CornerToLetter(buffer) == "M" || cube.CornerToLetter(buffer) == "B")
+            {
+                // get other starting piece
+                aktCorner = GetUnsolvedCorner();
+            }
+
+            do
+            {
+                NewCornerCycle(aktCorner);
+                aktCorner = GetUnsolvedCorner();
+
+            } while (aktCorner is not null);
+
+            return String.Join(String.Empty, cornerMeme.Reverse().ToArray());
+        }
+
+        private void NewCornerCycle(Corner aktCorner)
+        {
+            throw new NotImplementedException();
+        }
+
+        private Corner GetUnsolvedCorner()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -46,12 +73,12 @@ namespace rubikmemr
 
             } while (aktSide is not null);
 
-            if (meme.Count() % 2 != 0)
+            if (edgeMeme.Count() % 2 != 0)
             {
                 Parity = true;
             }
 
-            return String.Join(String.Empty, meme.Reverse().ToArray());
+            return String.Join(String.Empty, edgeMeme.Reverse().ToArray());
         }
 
         private Edge GetUnsolvedEdge()
@@ -85,13 +112,13 @@ namespace rubikmemr
 
                 var letter = cube.EdgeToLetter(aktSide);
                 aktSide = cube.LetterToEdge(letter);
-                meme.Push(letter);
+                edgeMeme.Push(letter);
 
             } while (!visitedEdges.Contains(aktSide));
 
-            if (meme.Peek() == "B")
+            if (edgeMeme.Peek() == "B")
             {
-                meme.Pop();
+                edgeMeme.Pop();
             }
         }
 
