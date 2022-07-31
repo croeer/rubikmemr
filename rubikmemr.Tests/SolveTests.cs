@@ -136,6 +136,17 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual("SIRFAEXOPNK", meme) ;
         }
+
+        [Test]
+        public void Corners_Only_Test()
+        {
+            var cube = new rubikmemr.Cube();
+            cube.TurnByString("L' U2 F' L2 F U2 L2 U2 R2 U2 F U2 F2 R F L' F' R' F R2");
+            var solver = new Solver(cube);
+            var meme = solver.SolveCorners();
+
+            Assert.AreEqual("SIRFAEXOPNK", meme) ;
+        }
         #endregion
     }
 }

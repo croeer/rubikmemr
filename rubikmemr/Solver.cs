@@ -18,12 +18,14 @@ namespace rubikmemr
 
         #region "Corners"
 
+        HashSet<Corner> visitedCorners = new HashSet<Corner>();
+
         public string SolveCorners()
         {
             var buffer = cube.LetterToCorner("P");
             Corner aktCorner = buffer;
 
-            if (cube.CornerToLetter(buffer) == "M" || cube.CornerToLetter(buffer) == "B")
+            if (cube.CornerToLetter(buffer) == "K" || cube.CornerToLetter(buffer) == "P" || cube.CornerToLetter(buffer) == "V")
             {
                 // get other starting piece
                 aktCorner = GetUnsolvedCorner();
@@ -39,14 +41,48 @@ namespace rubikmemr
             return String.Join(String.Empty, cornerMeme.Reverse().ToArray());
         }
 
-        private void NewCornerCycle(Corner aktCorner)
+        private void NewCornerCycle(Corner startCorner)
         {
-            throw new NotImplementedException();
+            var aktCorner = startCorner;
+            do
+            {
+                visitedCorners.Add(aktCorner);
+
+                var letter = cube.CornerToLetter(aktCorner);
+                aktCorner = cube.LetterToCorner(letter);
+                cornerMeme.Push(letter);
+
+            } while (!visitedCorners.Contains(aktCorner));
+
+            if (cornerMeme.Peek() == "P")
+            {
+                cornerMeme.Pop();
+            }
         }
 
         private Corner GetUnsolvedCorner()
         {
-            throw new NotImplementedException();
+            foreach (Corner tempCorner in cube.Corners.Where(x => !visitedCorners.Contains(x) && !cube.CornerToLetter(x).Equals("K") && !cube.CornerToLetter(x).Equals("P") && !cube.CornerToLetter(x).Equals("V")))
+            {
+                foreach (Corner inverseCorner in cube.InverseCorners(tempCorner))
+                {
+                    if (visitedCorners.Contains(inverseCorner))
+                    {
+                        continue;
+                    }
+                }
+
+                var color1 = cube.State[(int)tempCorner.position1.face, tempCorner.position1.index];
+                var color2 = cube.State[(int)tempCorner.position2.face, tempCorner.position2.index];
+                var color3 = cube.State[(int)tempCorner.position3.face, tempCorner.position3.index];
+                if (color1 != tempCorner.color1 || color2 != tempCorner.color2 || color3 != tempCorner.color3)
+                {
+                    return tempCorner;
+                }
+            }
+#pragma warning disable CS8603 // Possible null reference return.
+            return null;
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         #endregion
@@ -103,9 +139,9 @@ namespace rubikmemr
 #pragma warning restore CS8603 // Possible null reference return.
         }
 
-        private void NewEdgeCycle(Edge start)
+        private void NewEdgeCycle(Edge startEdge)
         {
-            var aktSide = start;
+            var aktSide = startEdge;
             do
             {
                 visitedEdges.Add(aktSide);
