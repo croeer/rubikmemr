@@ -37,7 +37,6 @@ namespace rubikmemr.Tests
 
         #region "turn by string"
 
-
         [Test]
         public void String_R_Test()
         {
@@ -68,7 +67,7 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(expectedState, cube.State);
         }
-        
+
         [Test]
         public void String_R_U_D_Rp_D2_Test()
         {
@@ -79,6 +78,255 @@ namespace rubikmemr.Tests
                 R().U().D().Rp().D().D();
 
             Assert.AreEqual(cube2.State, cube1.State);
+        }
+
+        #endregion
+
+        #region "manual tests for debugging"
+
+        [Test]
+        public void Dp_Dp_Test()
+        {
+
+            var cube1 = new rubikmemr.Cube().
+               L().L().U().U().R().R().Up().B().B().Up().
+               L().L().R().R().U().B().B().F().F().U().U().
+               Lp().D().Bp().L().L().B().U().Fp().Up().B().
+               Dp();
+
+            var cube2 = new rubikmemr.Cube().
+               L().L().U().U().R().R().Up().B().B().Up().
+               L().L().R().R().U().B().B().F().F().U().U().
+               Lp().D().Bp().L().L().B().U().Fp().Up().B().
+               Dp();
+
+            Assert.AreEqual(cube2.State, cube1.State);
+           
+        }
+
+        [Test]
+        public void Dp_F_Test()
+        {
+
+            var cube = new rubikmemr.Cube().
+            Dp().F();
+
+            var expectedState = new Color[,] {
+                { Color.yellow, Color.yellow, Color.yellow,
+                  Color.yellow, Color.yellow, Color.yellow,
+                  Color.red, Color.blue, Color.blue},
+                { Color.blue, Color.blue, Color.white,
+                  Color.blue, Color.blue, Color.white,
+                  Color.red, Color.red, Color.white},
+                { Color.green, Color.red, Color.red,
+                  Color.green, Color.red, Color.red,
+                  Color.green, Color.red, Color.red},
+                { Color.yellow, Color.green, Color.green,
+                  Color.yellow, Color.green, Color.green,
+                  Color.yellow, Color.orange, Color.orange},
+                { Color.orange, Color.orange, Color.orange,
+                  Color.orange, Color.orange, Color.orange,
+                  Color.blue, Color.blue, Color.blue},
+                { Color.orange, Color.green, Color.green,
+                  Color.white, Color.white, Color.white,
+                  Color.white, Color.white, Color.white}
+            };
+
+            Assert.AreEqual(expectedState, cube.State);
+        }
+
+        [Test]
+        public void Dp_Dp_F_Test()
+        {
+
+            var cube = new rubikmemr.Cube().
+            Dp().Dp().F();
+
+            var expectedState = new Color[,] {
+                { Color.yellow, Color.yellow, Color.yellow,
+                  Color.yellow, Color.yellow, Color.yellow,
+                  Color.green, Color.blue, Color.blue},
+                { Color.blue, Color.blue, Color.white,
+                  Color.blue, Color.blue, Color.white,
+                  Color.green, Color.green, Color.white},
+                { Color.orange, Color.red, Color.red,
+                  Color.orange, Color.red, Color.red,
+                  Color.orange, Color.red, Color.red},
+                { Color.yellow, Color.green, Color.green,
+                  Color.yellow, Color.green, Color.green,
+                  Color.yellow, Color.blue, Color.blue},
+                { Color.orange, Color.orange, Color.orange,
+                  Color.orange, Color.orange, Color.orange,
+                  Color.red, Color.red, Color.red},
+                { Color.blue, Color.green, Color.green,
+                  Color.white, Color.white, Color.white,
+                  Color.white, Color.white, Color.white}
+            };
+
+            Assert.AreEqual(expectedState, cube.State);
+        }
+
+
+        [Test]
+        public void fehlersuche1_Test()
+        {
+            var cube = new rubikmemr.Cube().
+            Lp().U().U().Fp().L().L().F().U().U().L().L().U();
+
+            var expectedState = new Color[,] {
+                { Color.blue, Color.yellow, Color.orange,
+                  Color.yellow, Color.yellow, Color.blue,
+                  Color.green, Color.orange, Color.green},
+                { Color.yellow, Color.red, Color.orange,
+                  Color.blue, Color.blue, Color.yellow,
+                  Color.blue, Color.blue, Color.orange},
+                { Color.yellow, Color.blue, Color.yellow,
+                  Color.orange, Color.red, Color.red,
+                  Color.yellow, Color.red, Color.red},
+                { Color.red, Color.yellow, Color.white,
+                  Color.green, Color.green, Color.green,
+                  Color.green, Color.green, Color.green},
+                { Color.blue, Color.green, Color.red,
+                  Color.orange, Color.orange, Color.white,
+                  Color.orange, Color.orange, Color.white},
+                { Color.blue, Color.white, Color.white,
+                  Color.red, Color.white, Color.white,
+                  Color.red, Color.white, Color.white}
+            };
+
+            Assert.AreEqual(expectedState, cube.State);
+        }
+
+        [Test]
+        public void fehlersuche2_Test()
+        {
+            var cube = new rubikmemr.Cube().
+            Lp().U().U().Fp().L().L();
+
+            var expectedState = new Color[,] {
+                { Color.green, Color.yellow, Color.red,
+                  Color.orange, Color.yellow, Color.red,
+                  Color.orange, Color.green, Color.green},
+                { Color.yellow, Color.blue, Color.blue,
+                  Color.yellow, Color.blue, Color.blue,
+                  Color.red, Color.green, Color.green},
+                { Color.yellow, Color.red, Color.red,
+                  Color.yellow, Color.red, Color.red,
+                  Color.red, Color.white, Color.white},
+                { Color.white, Color.blue, Color.blue,
+                  Color.white, Color.green, Color.green,
+                  Color.orange, Color.green, Color.green},
+                { Color.white, Color.red, Color.orange,
+                  Color.orange, Color.orange, Color.orange,
+                  Color.orange, Color.orange, Color.yellow},
+                { Color.yellow, Color.blue, Color.blue,
+                  Color.yellow, Color.white, Color.white,
+                  Color.blue, Color.white, Color.white}
+            };
+
+            Assert.AreEqual(expectedState, cube.State);
+        }
+        
+        [Test]
+        public void fehlersuche3_Test()
+        {
+            var cube = new rubikmemr.Cube().
+            Lp().U().U();//.Fp().L().L();
+
+            var expectedState = new Color[,] {
+                { Color.yellow, Color.yellow, Color.red,
+                  Color.yellow, Color.yellow, Color.red,
+                  Color.yellow, Color.yellow, Color.red},
+                { Color.green, Color.green, Color.green,
+                  Color.blue, Color.blue, Color.blue,
+                  Color.blue, Color.blue, Color.blue},
+                { Color.orange, Color.orange, Color.yellow,
+                  Color.white, Color.red, Color.red,
+                  Color.white, Color.red, Color.red},
+                { Color.blue, Color.blue, Color.blue,
+                  Color.green, Color.green, Color.green,
+                  Color.green, Color.green, Color.green},
+                { Color.white, Color.red, Color.red,
+                  Color.orange, Color.orange, Color.yellow,
+                  Color.orange, Color.orange, Color.yellow},
+                { Color.orange, Color.white, Color.white,
+                  Color.orange, Color.white, Color.white,
+                  Color.orange, Color.white, Color.white}
+            };
+
+            Assert.AreEqual(expectedState, cube.State);
+        }        
+
+        [Test]
+        public void fehlersuche4_Test()
+        {
+            var cube = new rubikmemr.Cube().
+            Lp().U().U().Fp();
+
+            var expectedState = new Color[,] {
+                { Color.yellow, Color.yellow, Color.red,
+                  Color.yellow, Color.yellow, Color.red,
+                  Color.blue, Color.green, Color.green},
+                { Color.green, Color.green, Color.red,
+                  Color.blue, Color.blue, Color.yellow,
+                  Color.blue, Color.blue, Color.yellow},
+                { Color.yellow, Color.red, Color.red,
+                  Color.orange, Color.red, Color.red,
+                  Color.orange, Color.white, Color.white},
+                { Color.white, Color.blue, Color.blue,
+                  Color.white, Color.green, Color.green,
+                  Color.orange, Color.green, Color.green},
+                { Color.white, Color.red, Color.red,
+                  Color.orange, Color.orange, Color.yellow,
+                  Color.orange, Color.orange, Color.yellow},
+                { Color.green, Color.blue, Color.blue,
+                  Color.orange, Color.white, Color.white,
+                  Color.orange, Color.white, Color.white}
+            };
+
+            Assert.AreEqual(expectedState, cube.State);
+        }
+
+        #endregion
+
+        #region "corners only"
+
+        [Test]
+        public void Corners_Only_Test()
+        {
+            /*
+             * L' U2 F' L2 F U2 L2 U2 R2 U2 F U2 F2 R F L' F' R' F R2
+             * https://cstimer.net/
+             * N4IgzgxgTgYgNgFxALhAbQDoggeygOwFMowsAafAVzjgF0QzxoAVATwAdCVs8iSGQCHDjhgUCKJUIBfIA
+            */
+
+            var cube = new rubikmemr.Cube().
+            Lp().U().U().Fp().L().L().F().U().U().L().L().U().
+            U().R().R().U().U().F().U().U().F().F().R().F().
+            Lp().Fp().Rp().F().R().R();
+
+            var expectedState = new Color[,] {
+                { Color.orange, Color.yellow, Color.blue,
+                  Color.yellow, Color.yellow, Color.yellow,
+                  Color.orange, Color.yellow, Color.red},
+                { Color.white, Color.blue, Color.white,
+                  Color.blue, Color.blue, Color.blue,
+                  Color.white, Color.blue, Color.green},
+                { Color.blue, Color.red, Color.blue,
+                  Color.red, Color.red, Color.red,
+                  Color.red, Color.red, Color.yellow},
+                { Color.white, Color.green, Color.red,
+                  Color.green, Color.green, Color.green,
+                  Color.blue, Color.green, Color.yellow},
+                { Color.yellow, Color.orange, Color.green,
+                  Color.orange, Color.orange, Color.orange,
+                  Color.orange, Color.orange, Color.green},
+                { Color.yellow, Color.white, Color.orange,
+                  Color.white, Color.white, Color.white,
+                  Color.red, Color.white, Color.green}
+            };
+
+            Assert.AreEqual(expectedState, cube.State);
         }
 
         #endregion
@@ -628,7 +876,7 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(expectedState, cube.State);
         }
-        
+
         [Test]
         public void R_U_Dp_Test()
         {
@@ -677,7 +925,7 @@ namespace rubikmemr.Tests
             var cube = new rubikmemr.Cube();
 
             Edge sideA = cube.LetterToEdge("A");
-            Assert.AreEqual((Face.Up,1), sideA.position1);
+            Assert.AreEqual((Face.Up, 1), sideA.position1);
             Assert.AreEqual(Color.yellow, sideA.color1);
             Assert.AreEqual(Color.orange, sideA.color2);
         }

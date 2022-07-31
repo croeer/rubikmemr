@@ -61,6 +61,9 @@ namespace rubikmemr
         ILookup<Tuple<Color, Color>, Edge> edgeToLetter;
         ILookup<string, Edge> letterToEdge;
 
+        ILookup<Tuple<Color, Color, Color>, Corner> cornerToLetter;
+        ILookup<string, Corner> letterToCorner;
+
         HashSet<Corner> corners = new HashSet<Corner>();
 
         public void TurnByString(string s)
@@ -82,6 +85,32 @@ namespace rubikmemr
             }
 
         }
+
+        public Corner LetterToCorner(string letter)
+        {
+            var tempCorner = letterToCorner[letter].Single();
+            var color1 = State[(int)tempCorner.position1.face, tempCorner.position1.index];
+            var color2 = State[(int)tempCorner.position2.face, tempCorner.position2.index];
+            var color3 = State[(int)tempCorner.position3.face, tempCorner.position3.index];
+
+            return cornerToLetter[new Tuple<Color, Color, Color>(color1, color2, color3)].Single();
+        }
+
+        public string CornerToLetter(Corner corner)
+        {
+            return cornerToLetter[new Tuple<Color, Color, Color>(corner.color1, corner.color2, corner.color3)].Single().Name;
+        }
+
+
+        public List<Corner> InverseCorners(Corner corner)
+        {
+            var inverseCornerList = new List<Corner>();
+            inverseCornerList.Add( cornerToLetter[new Tuple<Color, Color, Color>(corner.color3, corner.color1, corner.color2)].Single());
+            inverseCornerList.Add( cornerToLetter[new Tuple<Color, Color, Color>(corner.color2, corner.color3, corner.color1)].Single());
+            return inverseCornerList;
+        }
+
+        public IEnumerable<Corner> Corners => corners.ToArray();
 
         #region "edges"
 
@@ -154,6 +183,10 @@ namespace rubikmemr
 
             edgeToLetter = edges.ToLookup(x => new Tuple<Color, Color>(x.color1, x.color2));
             letterToEdge = edges.ToLookup(x => x.Name);
+
+            letterToCorner = corners.ToLookup(x => x.Name);
+            cornerToLetter = corners.ToLookup(x => new Tuple<Color, Color, Color>(x.color1, x.color2, x.color3));
+
         }
 
         private void SetupEdges()
@@ -191,15 +224,15 @@ namespace rubikmemr
 
         private void SetupCorners()
         {
-            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.blue, Name = "A", position1 = (Face.Up, 0), position2 = (Face.Back, 2), position3 = (Face.Left, 0) });
-            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.green, color3 = Color.orange, Name = "B", position1 = (Face.Up, 1), position2 = (Face.Back, 0), position3 = (Face.Right, 2) });
+            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.blue, color3 = Color.orange, Name = "A", position1 = (Face.Up, 0), position2 = (Face.Left, 0), position3 = (Face.Back, 2) });
+            corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.green, Name = "B", position1 = (Face.Up, 2), position2 = (Face.Back, 0), position3 = (Face.Right, 2) });
             corners.Add(new Corner { color1 = Color.yellow, color2 = Color.green, color3 = Color.red, Name = "C", position1 = (Face.Up, 8), position2 = (Face.Right, 0), position3 = (Face.Front, 2) });
             corners.Add(new Corner { color1 = Color.yellow, color2 = Color.red, color3 = Color.blue, Name = "D", position1 = (Face.Up, 6), position2 = (Face.Front, 0), position3 = (Face.Left, 2) });
           
             corners.Add(new Corner { color1 = Color.blue, color2 = Color.orange, color3 = Color.yellow, Name = "E", position1 = (Face.Left, 0), position2 = (Face.Back, 2), position3 = (Face.Up, 0) });
             corners.Add(new Corner { color1 = Color.blue, color2 = Color.yellow, color3 = Color.red, Name = "F", position1 = (Face.Left, 2), position2 = (Face.Up, 6), position3 = (Face.Front, 0) });
             corners.Add(new Corner { color1 = Color.blue, color2 = Color.red, color3 = Color.white, Name = "G", position1 = (Face.Left, 8), position2 = (Face.Front, 6), position3 = (Face.Down, 0) });
-            corners.Add(new Corner { color1 = Color.blue, color2 = Color.white, color3 = Color.orange, Name = "H", position1 = (Face.Left, 6), position2 = (Face.Down, 6), position3 = (Face.Back, 6) });
+            corners.Add(new Corner { color1 = Color.blue, color2 = Color.white, color3 = Color.orange, Name = "H", position1 = (Face.Left, 6), position2 = (Face.Down, 6), position3 = (Face.Back, 8) });
    
             corners.Add(new Corner { color1 = Color.red, color2 = Color.blue, color3 = Color.yellow, Name = "I", position1 = (Face.Front, 0), position2 = (Face.Left, 2), position3 = (Face.Up, 6) });
             corners.Add(new Corner { color1 = Color.red, color2 = Color.yellow, color3 = Color.green, Name = "J", position1 = (Face.Front, 2), position2 = (Face.Up, 8), position3 = (Face.Right, 0) });
@@ -303,14 +336,14 @@ namespace rubikmemr
             State[(int)Face.Right, 6] = State[(int)Face.Down, 0];
 
             // down
-            State[(int)Face.Down, 2] = State[(int)Face.Left, 8];
-            State[(int)Face.Down, 1] = State[(int)Face.Left, 5];
             State[(int)Face.Down, 0] = State[(int)Face.Left, 2];
+            State[(int)Face.Down, 1] = State[(int)Face.Left, 5];
+            State[(int)Face.Down, 2] = State[(int)Face.Left, 8];
 
             // right
-            State[(int)Face.Left, 2] = t1;
+            State[(int)Face.Left, 2] = t3;
             State[(int)Face.Left, 5] = t2;
-            State[(int)Face.Left, 8] = t3;
+            State[(int)Face.Left, 8] = t1;
 
             // rotate front cw
             State[(int)Face.Front, 0] = rot2;
@@ -956,18 +989,6 @@ namespace rubikmemr
                 y: (float)y2 * SQ);
             return points;
         }
-
-        public Corner LetterToCorner(string letter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string CornerToLetter(Corner buffer)
-        {
-            throw new NotImplementedException();
-        }
-
-
 
         #endregion
     }
