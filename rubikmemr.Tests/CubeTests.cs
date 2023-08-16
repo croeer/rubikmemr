@@ -475,8 +475,15 @@ namespace rubikmemr.Tests
             Assert.AreEqual(defaultCube.State, defaultCube.F().Fp().State);
             Assert.AreEqual(defaultCube.State, defaultCube.Fp().F().State);
         }
+        
+        [Test]
+        public void F2_FF_Test()
+        {
+            var cube1 = new Cube().F2();
+            var cube2 = new Cube().F().F();
 
-
+            Assert.AreEqual(cube1.State, cube2.State);
+        }
 
         #endregion
 
@@ -549,6 +556,16 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(defaultCube.State, defaultCube.U().Up().State);
             Assert.AreEqual(defaultCube.State, defaultCube.Up().U().State);
+        }
+
+
+        [Test]
+        public void U2_UU_Test()
+        {
+            var cube1 = new Cube().U2();
+            var cube2 = new Cube().U().U();
+
+            Assert.AreEqual(cube1.State, cube2.State);
         }
 
         #endregion

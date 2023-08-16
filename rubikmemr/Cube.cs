@@ -249,10 +249,10 @@ namespace rubikmemr
             corners.Add(new Corner { color1 = Color.orange, color2 = Color.blue, color3 = Color.white, Name = "S", position1 = (Face.Back, 8), position2 = (Face.Left, 6), position3 = (Face.Down, 6) });
             corners.Add(new Corner { color1 = Color.orange, color2 = Color.white, color3 = Color.green, Name = "T", position1 = (Face.Back, 6), position2 = (Face.Down, 8), position3 = (Face.Right, 8) });
   
-            corners.Add(new Corner { color1 = Color.white, color2 = Color.orange, color3 = Color.blue, Name = "U", position1 = (Face.Down, 0), position2 = (Face.Left, 8), position3 = (Face.Front, 6) });
-            corners.Add(new Corner { color1 = Color.white, color2 = Color.blue, color3 = Color.red, Name = "V", position1 = (Face.Down, 2), position2 = (Face.Front, 8), position3 = (Face.Right, 6) });
-            corners.Add(new Corner { color1 = Color.white, color2 = Color.red, color3 = Color.green, Name = "W", position1 = (Face.Down, 8), position2 = (Face.Right, 8), position3 = (Face.Back, 6) });
-            corners.Add(new Corner { color1 = Color.white, color2 = Color.green, color3 = Color.orange, Name = "X", position1 = (Face.Down, 6), position2 = (Face.Back, 8), position3 = (Face.Left, 6) });
+            corners.Add(new Corner { color1 = Color.white, color2 = Color.blue, color3 = Color.red, Name = "U", position1 = (Face.Down, 0), position2 = (Face.Left, 8), position3 = (Face.Front, 6) });
+            corners.Add(new Corner { color1 = Color.white, color2 = Color.red, color3 = Color.green, Name = "V", position1 = (Face.Down, 2), position2 = (Face.Front, 8), position3 = (Face.Right, 6) });
+            corners.Add(new Corner { color1 = Color.white, color2 = Color.green, color3 = Color.orange, Name = "W", position1 = (Face.Down, 8), position2 = (Face.Right, 8), position3 = (Face.Back, 6) });
+            corners.Add(new Corner { color1 = Color.white, color2 = Color.orange, color3 = Color.blue, Name = "X", position1 = (Face.Down, 6), position2 = (Face.Back, 8), position3 = (Face.Left, 6) });
 
         }
 
@@ -359,6 +359,11 @@ namespace rubikmemr
             return r;
         }
 
+        public Cube F2()
+        {
+            return this.F().F();
+        }
+
         #endregion
 
         #region "U moves"
@@ -460,6 +465,11 @@ namespace rubikmemr
             State[(int)Face.Up, 8] = rot6;
 
             return this;
+        }
+
+        public Cube U2()
+        {
+            return this.U().U();
         }
 
         #endregion

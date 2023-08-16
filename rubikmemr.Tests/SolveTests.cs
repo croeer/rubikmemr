@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using rubikmemr;
 
 namespace rubikmemr.Tests
 {
@@ -20,6 +19,18 @@ namespace rubikmemr.Tests
         }
 
         [Test]
+        public void L_Corners_Test()
+        {
+            var cube = new rubikmemr.Cube().
+                L();
+
+            var solver = new Solver(cube);
+            var meme = solver.SolveCorners();
+
+            Assert.AreEqual("SUI", meme);
+        }
+
+        [Test]
         public void R_Corners_Test()
         {
             var cube = new rubikmemr.Cube().
@@ -28,8 +39,7 @@ namespace rubikmemr.Tests
             var solver = new Solver(cube);
             var meme = solver.SolveCorners();
 
-            Assert.AreEqual("WBJH", meme);
-            Assert.IsTrue(solver.Parity);
+            Assert.AreEqual("PONMP", meme);
         }
 
         #region "Cycles"
@@ -43,7 +53,7 @@ namespace rubikmemr.Tests
             var solver = new Solver(cube);
             var meme = solver.SolveEdges();
 
-            Assert.AreEqual("CD", meme) ;
+            Assert.AreEqual("CD", meme);
         }
 
         [Test]
@@ -57,7 +67,7 @@ namespace rubikmemr.Tests
             var solver = new Solver(cube);
             var meme = solver.SolveEdges();
 
-            Assert.AreEqual("AQCIDEFLGXHRJPKUNTOVSW", meme) ;
+            Assert.AreEqual("AQCIDEFLGXHRJPKUNTOVSW", meme);
         }
 
         [Test]
@@ -90,7 +100,7 @@ namespace rubikmemr.Tests
             var solver = new Solver(cube);
             var meme = solver.SolveEdges();
 
-            Assert.AreEqual("ACD", meme) ;
+            Assert.AreEqual("ACD", meme);
         }
 
         [Test]
@@ -123,7 +133,20 @@ namespace rubikmemr.Tests
             var solver = new Solver(cube);
             var meme = solver.SolveEdges();
 
-            Assert.AreEqual("ACD", meme) ;
+            Assert.AreEqual("ACD", meme);
+        }
+
+        [Test]
+        public void Boatox_Scramble_Test()
+        {
+            var cube = new rubikmemr.Cube();
+            cube.TurnByString("U R B2 D F2 Dp U F2 R2 F2 Bp R B R2 U2 B R D2 Up Rp");
+            var solver = new Solver(cube);
+            var edgeMeme = solver.SolveEdges();
+            var cornerMeme = solver.SolveEdges();
+
+            Assert.AreEqual("SIRFAEXOPNK", edgeMeme);
+            Assert.AreEqual("SIRFAEXOPNK", cornerMeme);
         }
 
         [Test]
@@ -134,7 +157,7 @@ namespace rubikmemr.Tests
             var solver = new Solver(cube);
             var meme = solver.SolveEdges();
 
-            Assert.AreEqual("SIRFAEXOPNK", meme) ;
+            Assert.AreEqual("SIRFAEXOPNK", meme);
         }
 
         [Test]
@@ -145,7 +168,7 @@ namespace rubikmemr.Tests
             var solver = new Solver(cube);
             var meme = solver.SolveCorners();
 
-            Assert.AreEqual("SIRFAEXOPNK", meme) ;
+            Assert.AreEqual("TQDSPCL", meme);
         }
         #endregion
     }

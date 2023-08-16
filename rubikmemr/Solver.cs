@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace rubikmemr
+﻿namespace rubikmemr
 {
     public class Solver
     {
@@ -22,13 +20,15 @@ namespace rubikmemr
 
         public string SolveCorners()
         {
-            var buffer = cube.LetterToCorner("P");
+            var buffer = cube.LetterToCorner("A");
             Corner aktCorner = buffer;
 
-            if (cube.CornerToLetter(buffer) == "K" || cube.CornerToLetter(buffer) == "P" || cube.CornerToLetter(buffer) == "V")
+            if (cube.CornerToLetter(buffer) == "A" || cube.CornerToLetter(buffer) == "R" || cube.CornerToLetter(buffer) == "E")
             {
+                aktCorner = cube.LetterToCorner("P");
+                cornerMeme.Push("P");
                 // get other starting piece
-                aktCorner = GetUnsolvedCorner();
+                //aktCorner = GetUnsolvedCorner();
             }
 
             do
@@ -44,32 +44,62 @@ namespace rubikmemr
         private void NewCornerCycle(Corner startCorner)
         {
             var aktCorner = startCorner;
+
+            var startPieces = new HashSet<Corner>();
+            startPieces.Add(startCorner);
+            foreach (Corner corner in cube.InverseCorners(startCorner))
+            {
+                startPieces.Add(corner);
+            }
+
+
             do
             {
                 visitedCorners.Add(aktCorner);
+                foreach (Corner corner in cube.InverseCorners(aktCorner))
+                {
+                    visitedCorners.Add(corner);
+                }
 
                 var letter = cube.CornerToLetter(aktCorner);
+
+                // buffer piece found? then start new cycle
+                if (letter == "A" || letter == "E" || letter == "R")
+                {
+                    //var lastLetter = cornerMeme.Pop();
+                    //var lastPiece = cube.LetterToCorner(lastLetter);
+                    //visitedCorners.Remove(lastPiece);
+                    //foreach (Corner corner in cube.InverseCorners(lastPiece))
+                    //{
+                    //    visitedCorners.Remove(corner);
+                    //}
+                    break;
+                }
+
                 aktCorner = cube.LetterToCorner(letter);
                 cornerMeme.Push(letter);
 
-            } while (!visitedCorners.Contains(aktCorner));
+            } while (!startPieces.Contains(aktCorner));
 
-            if (cornerMeme.Peek() == "P")
-            {
-                cornerMeme.Pop();
-            }
         }
 
         private Corner GetUnsolvedCorner()
         {
-            foreach (Corner tempCorner in cube.Corners.Where(x => !visitedCorners.Contains(x) && !cube.CornerToLetter(x).Equals("K") && !cube.CornerToLetter(x).Equals("P") && !cube.CornerToLetter(x).Equals("V")))
+            foreach (Corner tempCorner in cube.Corners.Where(x => !visitedCorners.Contains(x))) // && !cube.CornerToLetter(x).Equals("A") && !cube.CornerToLetter(x).Equals("E") && !cube.CornerToLetter(x).Equals("R")))
             {
+                var skipIteration = false;
+
                 foreach (Corner inverseCorner in cube.InverseCorners(tempCorner))
                 {
                     if (visitedCorners.Contains(inverseCorner))
                     {
-                        continue;
+                        skipIteration = true;
                     }
+                }
+
+                if (skipIteration)
+                {
+                    continue;
                 }
 
                 var color1 = cube.State[(int)tempCorner.position1.face, tempCorner.position1.index];
@@ -141,16 +171,17 @@ namespace rubikmemr
 
         private void NewEdgeCycle(Edge startEdge)
         {
-            var aktSide = startEdge;
+            var aktEdge = startEdge;
             do
             {
-                visitedEdges.Add(aktSide);
+                visitedEdges.Add(aktEdge);
+                visitedEdges.Add(cube.InverseEdge(aktEdge));
 
-                var letter = cube.EdgeToLetter(aktSide);
-                aktSide = cube.LetterToEdge(letter);
+                var letter = cube.EdgeToLetter(aktEdge);
+                aktEdge = cube.LetterToEdge(letter);
                 edgeMeme.Push(letter);
 
-            } while (!visitedEdges.Contains(aktSide));
+            } while (!visitedEdges.Contains(aktEdge));
 
             if (edgeMeme.Peek() == "B")
             {
