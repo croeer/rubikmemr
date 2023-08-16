@@ -6,6 +6,19 @@ namespace rubikmemr.Tests
     {
 
         [Test]
+        public void R_Complete_Test()
+        {
+            var cube = new rubikmemr.Cube().
+                R();
+
+            var solver = new Solver(cube);
+            var meme = solver.Solve();
+
+            Assert.AreEqual("JVTCBCPONMP", meme);
+            Assert.IsTrue(solver.Parity);
+        }
+
+        [Test]
         public void R_Edges_Test()
         {
             var cube = new rubikmemr.Cube().

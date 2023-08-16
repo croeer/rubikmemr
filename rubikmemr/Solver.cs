@@ -14,6 +14,14 @@
             this.cube = cube;
         }
 
+        public string Solve()
+        {
+            var edgeMeme = SolveEdges();
+            var cornerMeme = SolveCorners();
+
+            return edgeMeme + (Parity ? "CBC" : String.Empty) + cornerMeme;
+        }
+
         #region "Corners"
 
         HashSet<Corner> visitedCorners = new HashSet<Corner>();
