@@ -53,8 +53,22 @@ namespace rubikmemr.Tests
             var meme = solver.SolveCorners();
 
             Assert.AreEqual("PONMP", meme);
+            Assert.IsTrue(solver.Parity);
+
         }
 
+        [Test]
+        public void CB_Test()
+        {
+            var cube = new rubikmemr.Cube().
+                Rp().Dp().R().U().U().Rp().D().R().Up().Rp().Dp().R().Up().Rp().D().R();
+
+            var solver = new Solver(cube);
+            var meme = solver.SolveCorners();
+
+            Assert.AreEqual("CB", meme);
+            Assert.IsFalse(solver.Parity);
+        }
         #region "Cycles"
 
         [Test]
