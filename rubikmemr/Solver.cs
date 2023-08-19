@@ -179,6 +179,7 @@
 
         private void NewEdgeCycle(Edge startEdge)
         {
+            //Console.WriteLine(startEdge);
             var aktEdge = startEdge;
             do
             {
@@ -191,7 +192,7 @@
 
             } while (!visitedEdges.Contains(aktEdge));
 
-            if (edgeMeme.Peek() == "B")
+            if (edgeMeme.Peek() == "B" || edgeMeme.Peek() == "M")
             {
                 edgeMeme.Pop();
             }

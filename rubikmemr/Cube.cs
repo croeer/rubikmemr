@@ -18,6 +18,11 @@ namespace rubikmemr
 
         public (Face face, int index) position1;
         public (Face face, int index) position2;
+
+        public override string ToString()
+        {
+            return $"{Name} {color1} {color2}";
+        }
     }
 
     [DebuggerDisplay("{Name} {color1} {color2} {color3}")]
@@ -32,6 +37,11 @@ namespace rubikmemr
         public (Face face, int index) position1;
         public (Face face, int index) position2;
         public (Face face, int index) position3;
+
+        public override string ToString()
+        {
+            return $"{Name} {color1} {color2} {color3}";
+        }
     }
 
     public enum Color
