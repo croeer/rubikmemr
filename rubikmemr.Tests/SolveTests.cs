@@ -14,7 +14,7 @@ namespace rubikmemr.Tests
             var solver = new Solver(cube);
             var meme = solver.Solve();
 
-            Assert.AreEqual("JVTCBCPONMP", meme);
+            Assert.AreEqual("JVT.BCB.PONMP", meme);
             Assert.IsTrue(solver.Parity);
         }
 
@@ -41,6 +41,49 @@ namespace rubikmemr.Tests
             var meme = solver.SolveCorners();
 
             Assert.AreEqual("SUI", meme);
+        }
+
+        [Test]
+        public void Flipped_Corner_B_Test()
+        {
+            var initialState = new Color[,] {
+                { Color.orange, Color.yellow, Color.orange,
+                  Color.yellow, Color.yellow, Color.green,
+                  Color.yellow, Color.yellow, Color.yellow},
+                { Color.yellow, Color.blue, Color.blue,
+                  Color.blue, Color.blue, Color.blue,
+                  Color.blue, Color.blue, Color.blue},
+                { Color.red, Color.red, Color.red,
+                  Color.red, Color.red, Color.red,
+                  Color.red, Color.red, Color.red},
+                { Color.green, Color.green, Color.yellow,
+                  Color.green, Color.green, Color.green,
+                  Color.green, Color.green, Color.green},
+                { Color.green, Color.orange, Color.blue,
+                  Color.orange, Color.orange, Color.orange,
+                  Color.orange, Color.orange, Color.orange},
+                { Color.white, Color.white, Color.white,
+                  Color.white, Color.white, Color.white,
+                  Color.white, Color.white, Color.white}
+            };
+
+            var cube = new rubikmemr.Cube(initialState);
+            var solver = new Solver(cube);
+            var meme = solver.SolveCorners();
+
+            Assert.AreEqual("BQN", meme);
+        }
+
+        [Test]
+        public void UR_Corners_Test()
+        {
+            var cube = new rubikmemr.Cube().
+                U().R();
+
+            var solver = new Solver(cube);
+            var meme = solver.SolveCorners();
+
+            Assert.AreEqual("DCKWBN", meme);
         }
 
         [Test]
@@ -97,7 +140,7 @@ namespace rubikmemr.Tests
         }
 
         [Test]
-        public void Flipped_Edge_CJ_Test()
+        public void Flipped_Edge_CI_Test()
         {
 
             var initialState = new Color[,] {
@@ -126,7 +169,7 @@ namespace rubikmemr.Tests
             var solver = new Solver(cube);
             var meme = solver.SolveEdges();
 
-            Assert.AreEqual("CJ", meme);
+            Assert.AreEqual("CI", meme);
         }
 
         [Test]
@@ -195,7 +238,7 @@ namespace rubikmemr.Tests
             var solver = new Solver(cube);
             var meme = solver.SolveCorners();
 
-            Assert.AreEqual("TQDSPCL", meme);
+            Assert.AreEqual("TQDSPCLJ", meme);
         }
         #endregion
     }

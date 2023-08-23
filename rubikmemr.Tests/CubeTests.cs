@@ -101,7 +101,7 @@ namespace rubikmemr.Tests
                Dp();
 
             Assert.AreEqual(cube2.State, cube1.State);
-           
+
         }
 
         [Test]
@@ -226,7 +226,7 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(expectedState, cube.State);
         }
-        
+
         [Test]
         public void fehlersuche3_Test()
         {
@@ -255,7 +255,7 @@ namespace rubikmemr.Tests
             };
 
             Assert.AreEqual(expectedState, cube.State);
-        }        
+        }
 
         [Test]
         public void fehlersuche4_Test()
@@ -475,7 +475,7 @@ namespace rubikmemr.Tests
             Assert.AreEqual(defaultCube.State, defaultCube.F().Fp().State);
             Assert.AreEqual(defaultCube.State, defaultCube.Fp().F().State);
         }
-        
+
         [Test]
         public void F2_FF_Test()
         {
@@ -948,5 +948,44 @@ namespace rubikmemr.Tests
         }
         #endregion
 
+        #region "corners"
+        [Test]
+        public void IsCornerSolved_DefaultCube_Test()
+        {
+            var cube = new rubikmemr.Cube();
+
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("A")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("B")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("C")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("D")));
+
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("E")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("F")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("G")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("H")));
+
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("I")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("J")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("K")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("L")));
+
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("M")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("N")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("O")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("P")));
+
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("Q")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("R")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("S")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("T")));
+
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("U")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("V")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("W")));
+            Assert.IsTrue(cube.IsCornerSolved(cube.LetterToCorner("X")));
+
+        }
+
+        #endregion
     }
 }

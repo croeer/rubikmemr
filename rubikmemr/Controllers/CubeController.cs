@@ -15,7 +15,7 @@ namespace rubikmemr.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get(string s)
+        public IActionResult GetPng(string s)
         {
             var cube = new Cube();
             cube.TurnByString(s);
@@ -23,6 +23,16 @@ namespace rubikmemr.Controllers
             return File(image, "image/png");
         }
 
+        [HttpGet("solve")]
+        public IActionResult Solve(string s)
+        {
+            var cube = new Cube();
+            cube.TurnByString(s);
+
+            Solver slv = new(cube);
+            return Ok(slv.Solve());
+
+        }
 
     }
 }

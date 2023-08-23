@@ -19,7 +19,7 @@
             var edgeMeme = SolveEdges();
             var cornerMeme = SolveCorners();
 
-            return edgeMeme + (Parity ? "CBC" : String.Empty) + cornerMeme;
+            return edgeMeme + "." + (Parity ? "BCB." : String.Empty) + cornerMeme;
         }
 
         #region "Corners"
@@ -34,9 +34,17 @@
             if (cube.CornerToLetter(buffer) == "A" || cube.CornerToLetter(buffer) == "R" || cube.CornerToLetter(buffer) == "E")
             {
                 aktCorner = cube.LetterToCorner("P");
-                cornerMeme.Push("P");
-                // get other starting piece
-                //aktCorner = GetUnsolvedCorner();
+
+                if (cube.IsCornerSolved(aktCorner))
+                {
+                    // get other starting piece
+                    aktCorner = GetUnsolvedCorner();
+                    //cornerMeme.Push(cube.CornerToLetter(aktCorner));
+                }
+                else
+                {
+                    cornerMeme.Push("P");
+                }
             }
 
             do
@@ -53,20 +61,59 @@
         {
             var aktCorner = startCorner;
 
-            var startPieces = new HashSet<Corner>();
-            startPieces.Add(startCorner);
+            do
+            {
+                visitedCorners.Add(aktCorner);
+
+                if (aktCorner.Name == "A" || aktCorner.Name == "E" || aktCorner.Name == "R")
+                {
+                    foreach (Corner corner in cube.InverseCorners(aktCorner))
+                    {
+                        visitedCorners.Add(corner);
+                    }
+                }
+
+                var letter = cube.CornerToLetter(aktCorner);
+
+                // buffer piece found? then start new cycle
+                if (letter == "A" || letter == "E" || letter == "R")
+                {
+                    break;
+                }
+
+                aktCorner = cube.LetterToCorner(letter);
+                cornerMeme.Push(letter);
+
+            } while (!visitedCorners.Contains(aktCorner));
+
+        }
+
+        /*
+        private void NewCornerCycleOrig(Corner startCorner)
+        {
+            var aktCorner = startCorner;
+
+            var startPieces = new HashSet<Corner>
+            {
+                startCorner
+            };
+
             foreach (Corner corner in cube.InverseCorners(startCorner))
             {
-                startPieces.Add(corner);
+                if (visitedCorners.Contains(corner))
+                    startPieces.Add(corner);
             }
-
 
             do
             {
                 visitedCorners.Add(aktCorner);
-                foreach (Corner corner in cube.InverseCorners(aktCorner))
+
+                if (aktCorner.Name == "A" || aktCorner.Name == "E" || aktCorner.Name == "R")
                 {
-                    visitedCorners.Add(corner);
+                    foreach (Corner corner in cube.InverseCorners(aktCorner))
+                    {
+                        visitedCorners.Add(corner);
+                    }
                 }
 
                 var letter = cube.CornerToLetter(aktCorner);
@@ -90,6 +137,7 @@
             } while (!startPieces.Contains(aktCorner));
 
         }
+        */
 
         private Corner GetUnsolvedCorner()
         {
@@ -184,7 +232,10 @@
             do
             {
                 visitedEdges.Add(aktEdge);
-                visitedEdges.Add(cube.InverseEdge(aktEdge));
+                if (aktEdge.Name == "B" || aktEdge.Name == "M")
+                {
+                    visitedEdges.Add(cube.InverseEdge(aktEdge));
+                }
 
                 var letter = cube.EdgeToLetter(aktEdge);
                 aktEdge = cube.LetterToEdge(letter);

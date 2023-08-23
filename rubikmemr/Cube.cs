@@ -120,6 +120,18 @@ namespace rubikmemr
             return inverseCornerList;
         }
 
+        public bool IsCornerSolved(Corner corner)
+        {
+            var color1 = this.State[(int)corner.position1.face, corner.position1.index];
+            var color2 = this.State[(int)corner.position2.face, corner.position2.index];
+            var color3 = this.State[(int)corner.position3.face, corner.position3.index];
+            if (color1 != corner.color1 || color2 != corner.color2 || color3 != corner.color3)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public IEnumerable<Corner> Corners => corners.ToArray();
 
         #region "edges"
