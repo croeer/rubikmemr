@@ -96,6 +96,11 @@ namespace rubikmemr
 
         }
 
+        public void TurnCornerSwitch()
+        {
+            this.TurnByString("R Up Rp Up R U Rp Fp R U Rp Up Rp F R");
+        }
+
         public Corner LetterToCorner(string letter)
         {
             var tempCorner = letterToCorner[letter].Single();
@@ -115,8 +120,8 @@ namespace rubikmemr
         public List<Corner> InverseCorners(Corner corner)
         {
             var inverseCornerList = new List<Corner>();
-            inverseCornerList.Add( cornerToLetter[new Tuple<Color, Color, Color>(corner.color3, corner.color1, corner.color2)].Single());
-            inverseCornerList.Add( cornerToLetter[new Tuple<Color, Color, Color>(corner.color2, corner.color3, corner.color1)].Single());
+            inverseCornerList.Add(cornerToLetter[new Tuple<Color, Color, Color>(corner.color3, corner.color1, corner.color2)].Single());
+            inverseCornerList.Add(cornerToLetter[new Tuple<Color, Color, Color>(corner.color2, corner.color3, corner.color1)].Single());
             return inverseCornerList;
         }
 
@@ -130,6 +135,22 @@ namespace rubikmemr
                 return false;
             }
             return true;
+        }
+
+        public bool IsCornerFlipped(Corner corner)
+        {
+            if (IsCornerSolved(corner))
+                return false;
+
+            var color1 = this.State[(int)corner.position1.face, corner.position1.index];
+            var color2 = this.State[(int)corner.position2.face, corner.position2.index];
+            var color3 = this.State[(int)corner.position3.face, corner.position3.index];
+
+            var expectedCornerColors = new HashSet<Color>() { color1, color2, color3 };
+            var cornerColors = new HashSet<Color>() { corner.color1, corner.color2, corner.color3 };
+
+            return expectedCornerColors.SetEquals(cornerColors);
+
         }
 
         public IEnumerable<Corner> Corners => corners.ToArray();
@@ -250,27 +271,27 @@ namespace rubikmemr
             corners.Add(new Corner { color1 = Color.yellow, color2 = Color.orange, color3 = Color.green, Name = "B", position1 = (Face.Up, 2), position2 = (Face.Back, 0), position3 = (Face.Right, 2) });
             corners.Add(new Corner { color1 = Color.yellow, color2 = Color.green, color3 = Color.red, Name = "C", position1 = (Face.Up, 8), position2 = (Face.Right, 0), position3 = (Face.Front, 2) });
             corners.Add(new Corner { color1 = Color.yellow, color2 = Color.red, color3 = Color.blue, Name = "D", position1 = (Face.Up, 6), position2 = (Face.Front, 0), position3 = (Face.Left, 2) });
-          
+
             corners.Add(new Corner { color1 = Color.blue, color2 = Color.orange, color3 = Color.yellow, Name = "E", position1 = (Face.Left, 0), position2 = (Face.Back, 2), position3 = (Face.Up, 0) });
             corners.Add(new Corner { color1 = Color.blue, color2 = Color.yellow, color3 = Color.red, Name = "F", position1 = (Face.Left, 2), position2 = (Face.Up, 6), position3 = (Face.Front, 0) });
             corners.Add(new Corner { color1 = Color.blue, color2 = Color.red, color3 = Color.white, Name = "G", position1 = (Face.Left, 8), position2 = (Face.Front, 6), position3 = (Face.Down, 0) });
             corners.Add(new Corner { color1 = Color.blue, color2 = Color.white, color3 = Color.orange, Name = "H", position1 = (Face.Left, 6), position2 = (Face.Down, 6), position3 = (Face.Back, 8) });
-   
+
             corners.Add(new Corner { color1 = Color.red, color2 = Color.blue, color3 = Color.yellow, Name = "I", position1 = (Face.Front, 0), position2 = (Face.Left, 2), position3 = (Face.Up, 6) });
             corners.Add(new Corner { color1 = Color.red, color2 = Color.yellow, color3 = Color.green, Name = "J", position1 = (Face.Front, 2), position2 = (Face.Up, 8), position3 = (Face.Right, 0) });
             corners.Add(new Corner { color1 = Color.red, color2 = Color.green, color3 = Color.white, Name = "K", position1 = (Face.Front, 8), position2 = (Face.Right, 6), position3 = (Face.Down, 2) });
             corners.Add(new Corner { color1 = Color.red, color2 = Color.white, color3 = Color.blue, Name = "L", position1 = (Face.Front, 6), position2 = (Face.Down, 0), position3 = (Face.Left, 8) });
-   
+
             corners.Add(new Corner { color1 = Color.green, color2 = Color.red, color3 = Color.yellow, Name = "M", position1 = (Face.Right, 0), position2 = (Face.Front, 2), position3 = (Face.Up, 8) });
             corners.Add(new Corner { color1 = Color.green, color2 = Color.yellow, color3 = Color.orange, Name = "N", position1 = (Face.Right, 2), position2 = (Face.Up, 2), position3 = (Face.Back, 0) });
             corners.Add(new Corner { color1 = Color.green, color2 = Color.orange, color3 = Color.white, Name = "O", position1 = (Face.Right, 8), position2 = (Face.Back, 6), position3 = (Face.Down, 8) });
             corners.Add(new Corner { color1 = Color.green, color2 = Color.white, color3 = Color.red, Name = "P", position1 = (Face.Right, 6), position2 = (Face.Down, 2), position3 = (Face.Front, 8) });
-  
+
             corners.Add(new Corner { color1 = Color.orange, color2 = Color.green, color3 = Color.yellow, Name = "Q", position1 = (Face.Back, 0), position2 = (Face.Right, 2), position3 = (Face.Up, 2) });
             corners.Add(new Corner { color1 = Color.orange, color2 = Color.yellow, color3 = Color.blue, Name = "R", position1 = (Face.Back, 2), position2 = (Face.Up, 0), position3 = (Face.Left, 0) });
             corners.Add(new Corner { color1 = Color.orange, color2 = Color.blue, color3 = Color.white, Name = "S", position1 = (Face.Back, 8), position2 = (Face.Left, 6), position3 = (Face.Down, 6) });
             corners.Add(new Corner { color1 = Color.orange, color2 = Color.white, color3 = Color.green, Name = "T", position1 = (Face.Back, 6), position2 = (Face.Down, 8), position3 = (Face.Right, 8) });
-  
+
             corners.Add(new Corner { color1 = Color.white, color2 = Color.blue, color3 = Color.red, Name = "U", position1 = (Face.Down, 0), position2 = (Face.Left, 8), position3 = (Face.Front, 6) });
             corners.Add(new Corner { color1 = Color.white, color2 = Color.red, color3 = Color.green, Name = "V", position1 = (Face.Down, 2), position2 = (Face.Front, 8), position3 = (Face.Right, 6) });
             corners.Add(new Corner { color1 = Color.white, color2 = Color.green, color3 = Color.orange, Name = "W", position1 = (Face.Down, 8), position2 = (Face.Right, 8), position3 = (Face.Back, 6) });

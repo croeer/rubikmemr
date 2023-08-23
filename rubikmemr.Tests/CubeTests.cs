@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using rubikmemr;
 
 namespace rubikmemr.Tests
 {
@@ -34,6 +33,17 @@ namespace rubikmemr.Tests
 
             Assert.AreEqual(expectedState, cube.State);
         }
+
+        [Test]
+        public void FLipped_Corner_Detection_Test()
+        {
+            var cube = new rubikmemr.Cube();
+            cube.U().R();
+
+            var flippedCorner = cube.LetterToCorner("B");
+            Assert.IsTrue(cube.IsCornerFlipped(flippedCorner));
+        }
+
 
         #region "turn by string"
 

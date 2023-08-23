@@ -43,35 +43,45 @@ namespace rubikmemr.Tests
             Assert.AreEqual("SUI", meme);
         }
 
-        [Test]
-        public void Flipped_Corner_B_Test()
-        {
-            var initialState = new Color[,] {
-                { Color.orange, Color.yellow, Color.orange,
-                  Color.yellow, Color.yellow, Color.green,
-                  Color.yellow, Color.yellow, Color.yellow},
-                { Color.yellow, Color.blue, Color.blue,
-                  Color.blue, Color.blue, Color.blue,
-                  Color.blue, Color.blue, Color.blue},
-                { Color.red, Color.red, Color.red,
-                  Color.red, Color.red, Color.red,
-                  Color.red, Color.red, Color.red},
-                { Color.green, Color.green, Color.yellow,
-                  Color.green, Color.green, Color.green,
-                  Color.green, Color.green, Color.green},
-                { Color.green, Color.orange, Color.blue,
-                  Color.orange, Color.orange, Color.orange,
-                  Color.orange, Color.orange, Color.orange},
-                { Color.white, Color.white, Color.white,
-                  Color.white, Color.white, Color.white,
-                  Color.white, Color.white, Color.white}
-            };
 
-            var cube = new rubikmemr.Cube(initialState);
+        [Test]
+        public void Flipped_Corner_Q_Test()
+        {
+
+            var cube = new rubikmemr.Cube();
+
+            // turn "Q"
+            cube.TurnByString("Rp F"); // Setup
+            cube.TurnCornerSwitch();
+            cube.TurnByString("Fp R"); // undo Setup
+
             var solver = new Solver(cube);
             var meme = solver.SolveCorners();
 
-            Assert.AreEqual("BQN", meme);
+            Assert.AreEqual("Q", meme);
+        }
+
+
+        [Test]
+        public void Reverse_Meme_BD_Test()
+        {
+
+            var cube = new rubikmemr.Cube();
+
+            // turn "B"
+            cube.TurnByString("R Dp"); // Setup
+            cube.TurnCornerSwitch();
+            cube.TurnByString("D Rp"); // undo Setup
+
+            // turn "D"
+            cube.TurnByString("F Rp"); // Setup
+            cube.TurnCornerSwitch();
+            cube.TurnByString("R Fp"); // undo Setup
+
+            var solver = new Solver(cube);
+            var meme = solver.SolveCorners();
+
+            Assert.AreEqual("DB", meme);
         }
 
         [Test]

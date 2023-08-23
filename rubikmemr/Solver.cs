@@ -61,6 +61,11 @@
         {
             var aktCorner = startCorner;
 
+            if (cube.IsCornerFlipped(aktCorner))
+            {
+                HandleFlippedCorner(aktCorner);
+                return;
+            }
             do
             {
                 visitedCorners.Add(aktCorner);
@@ -86,6 +91,16 @@
 
             } while (!visitedCorners.Contains(aktCorner));
 
+        }
+
+        private void HandleFlippedCorner(Corner aktCorner)
+        {
+            visitedCorners.Add(aktCorner);
+            var letter = cube.CornerToLetter(aktCorner);
+            cornerMeme.Push(letter);
+            aktCorner = cube.LetterToCorner(letter);
+            letter = cube.CornerToLetter(aktCorner);
+            cornerMeme.Push(letter);
         }
 
         /*
