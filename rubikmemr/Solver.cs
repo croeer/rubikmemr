@@ -19,6 +19,9 @@
             var edgeMeme = SolveEdges();
             var cornerMeme = SolveCorners();
 
+            if (edgeMeme.Length % 2 != cornerMeme.Length % 2)
+                throw new InvalidOperationException($"Parity error: {edgeMeme}:{cornerMeme}");
+
             return edgeMeme + "." + (Parity ? "BCB." : String.Empty) + cornerMeme;
         }
 
@@ -39,7 +42,6 @@
                 {
                     // get other starting piece
                     aktCorner = GetUnsolvedCorner();
-                    //cornerMeme.Push(cube.CornerToLetter(aktCorner));
                 }
                 else
                 {
@@ -51,8 +53,15 @@
             {
                 NewCornerCycle(aktCorner);
                 aktCorner = GetUnsolvedCorner();
+                if (aktCorner is null)
+                    break;
 
-            } while (aktCorner is not null);
+                var letter = cube.CornerToLetter(aktCorner);
+                cornerMeme.Push(letter);
+                aktCorner = cube.LetterToCorner(letter);
+
+
+            } while (true);
 
             return String.Join(String.Empty, cornerMeme.Reverse().ToArray());
         }
@@ -61,21 +70,13 @@
         {
             var aktCorner = startCorner;
 
-            if (cube.IsCornerFlipped(aktCorner))
-            {
-                HandleFlippedCorner(aktCorner);
-                return;
-            }
             do
             {
                 visitedCorners.Add(aktCorner);
 
-                if (aktCorner.Name == "A" || aktCorner.Name == "E" || aktCorner.Name == "R")
+                foreach (Corner corner in cube.InverseCorners(aktCorner))
                 {
-                    foreach (Corner corner in cube.InverseCorners(aktCorner))
-                    {
-                        visitedCorners.Add(corner);
-                    }
+                    visitedCorners.Add(corner);
                 }
 
                 var letter = cube.CornerToLetter(aktCorner);
@@ -92,67 +93,6 @@
             } while (!visitedCorners.Contains(aktCorner));
 
         }
-
-        private void HandleFlippedCorner(Corner aktCorner)
-        {
-            visitedCorners.Add(aktCorner);
-            var letter = cube.CornerToLetter(aktCorner);
-            cornerMeme.Push(letter);
-            aktCorner = cube.LetterToCorner(letter);
-            letter = cube.CornerToLetter(aktCorner);
-            cornerMeme.Push(letter);
-        }
-
-        /*
-        private void NewCornerCycleOrig(Corner startCorner)
-        {
-            var aktCorner = startCorner;
-
-            var startPieces = new HashSet<Corner>
-            {
-                startCorner
-            };
-
-            foreach (Corner corner in cube.InverseCorners(startCorner))
-            {
-                if (visitedCorners.Contains(corner))
-                    startPieces.Add(corner);
-            }
-
-            do
-            {
-                visitedCorners.Add(aktCorner);
-
-                if (aktCorner.Name == "A" || aktCorner.Name == "E" || aktCorner.Name == "R")
-                {
-                    foreach (Corner corner in cube.InverseCorners(aktCorner))
-                    {
-                        visitedCorners.Add(corner);
-                    }
-                }
-
-                var letter = cube.CornerToLetter(aktCorner);
-
-                // buffer piece found? then start new cycle
-                if (letter == "A" || letter == "E" || letter == "R")
-                {
-                    //var lastLetter = cornerMeme.Pop();
-                    //var lastPiece = cube.LetterToCorner(lastLetter);
-                    //visitedCorners.Remove(lastPiece);
-                    //foreach (Corner corner in cube.InverseCorners(lastPiece))
-                    //{
-                    //    visitedCorners.Remove(corner);
-                    //}
-                    break;
-                }
-
-                aktCorner = cube.LetterToCorner(letter);
-                cornerMeme.Push(letter);
-
-            } while (!startPieces.Contains(aktCorner));
-
-        }
-        */
 
         private Corner GetUnsolvedCorner()
         {

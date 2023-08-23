@@ -19,6 +19,19 @@ namespace rubikmemr.Tests
         }
 
         [Test]
+        public void L_Complete_Test()
+        {
+            var cube = new rubikmemr.Cube().
+                L();
+
+            var solver = new Solver(cube);
+            var meme = solver.Solve();
+
+            Assert.AreEqual("DRXLD.BCB.SUI", meme);
+            Assert.IsTrue(solver.Parity);
+        }
+
+        [Test]
         public void R_Edges_Test()
         {
             var cube = new rubikmemr.Cube().
