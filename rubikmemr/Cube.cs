@@ -189,6 +189,18 @@ namespace rubikmemr
             return edgeToLetter[new Tuple<Color, Color>(color1, color2)].Single();
         }
 
+        public bool IsEdgeSolved(Edge edge)
+        {
+            var color1 = this.State[(int)edge.position1.face, edge.position1.index];
+            var color2 = this.State[(int)edge.position2.face, edge.position2.index];
+
+            if (color1 != edge.color1 || color2 != edge.color2)
+            {
+                return false;
+            }
+            return true;
+        }
+
         #endregion
 
         /// <summary>

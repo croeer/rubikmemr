@@ -135,20 +135,34 @@
         public string SolveEdges()
         {
             var buffer = cube.LetterToEdge("B");
-            Edge aktSide = buffer;
+            Edge aktEdge = buffer;
 
             if (cube.EdgeToLetter(buffer) == "M" || cube.EdgeToLetter(buffer) == "B")
             {
-                // get other starting piece
-                aktSide = GetUnsolvedEdge();
-            }
+                aktEdge = cube.LetterToEdge("D");
 
+                if (cube.IsEdgeSolved(aktEdge))
+                {
+                    // get other starting piece
+                    aktEdge = GetUnsolvedEdge();
+                }
+                else
+                {
+                    edgeMeme.Push("D");
+                }
+            }
             do
             {
-                NewEdgeCycle(aktSide);
-                aktSide = GetUnsolvedEdge();
+                NewEdgeCycle(aktEdge);
+                aktEdge = GetUnsolvedEdge();
+                if (aktEdge is null)
+                    break;
 
-            } while (aktSide is not null);
+                var letter = cube.EdgeToLetter(aktEdge);
+                cornerMeme.Push(letter);
+                aktEdge = cube.LetterToEdge(letter);
+
+            } while (true);
 
             if (edgeMeme.Count() % 2 != 0)
             {
@@ -182,26 +196,25 @@
 
         private void NewEdgeCycle(Edge startEdge)
         {
-            //Console.WriteLine(startEdge);
             var aktEdge = startEdge;
             do
             {
                 visitedEdges.Add(aktEdge);
-                if (aktEdge.Name == "B" || aktEdge.Name == "M")
-                {
-                    visitedEdges.Add(cube.InverseEdge(aktEdge));
-                }
+                visitedEdges.Add(cube.InverseEdge(aktEdge));
 
                 var letter = cube.EdgeToLetter(aktEdge);
+
+                // buffer piece found? then start new cycle
+                if (letter == "B" || letter == "M")
+                {
+                    break;
+                }
+
                 aktEdge = cube.LetterToEdge(letter);
                 edgeMeme.Push(letter);
 
             } while (!visitedEdges.Contains(aktEdge));
 
-            if (edgeMeme.Peek() == "B" || edgeMeme.Peek() == "M")
-            {
-                edgeMeme.Pop();
-            }
         }
 
         #endregion

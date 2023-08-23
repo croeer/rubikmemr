@@ -44,6 +44,20 @@ namespace rubikmemr.Tests
             Assert.IsTrue(solver.Parity);
         }
 
+
+        [Test]
+        public void L_Edges_Test()
+        {
+            var cube = new rubikmemr.Cube().
+                L();
+
+            var solver = new Solver(cube);
+            var meme = solver.SolveEdges();
+
+            Assert.AreEqual("DRXLD", meme);
+            Assert.IsTrue(solver.Parity);
+        }
+
         [Test]
         public void L_Corners_Test()
         {

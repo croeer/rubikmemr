@@ -997,5 +997,44 @@ namespace rubikmemr.Tests
         }
 
         #endregion
+
+        #region "edges"
+        [Test]
+        public void IsEdgeSolved_DefaultCube_Test()
+        {
+            var cube = new rubikmemr.Cube();
+
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("A")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("B")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("C")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("D")));
+
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("E")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("F")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("G")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("H")));
+
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("I")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("J")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("K")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("L")));
+
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("M")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("N")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("O")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("P")));
+
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("Q")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("R")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("S")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("T")));
+
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("U")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("V")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("W")));
+            Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("X")));
+
+        }
+        #endregion
     }
 }
