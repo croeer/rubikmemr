@@ -43,6 +43,14 @@
                     // get other starting piece
                     aktCorner = GetUnsolvedCorner();
                 }
+                else if (cube.IsCornerFlipped(aktCorner))
+                {
+                    cornerMeme.Push("P");
+                    foreach (Corner corner in cube.InverseCorners(aktCorner))
+                    {
+                        visitedCorners.Add(corner);
+                    }
+                }
                 else
                 {
                     cornerMeme.Push("P");
@@ -96,7 +104,7 @@
 
         private Corner GetUnsolvedCorner()
         {
-            foreach (Corner tempCorner in cube.Corners.Where(x => !visitedCorners.Contains(x))) // && !cube.CornerToLetter(x).Equals("A") && !cube.CornerToLetter(x).Equals("E") && !cube.CornerToLetter(x).Equals("R")))
+            foreach (Corner tempCorner in cube.Corners.Where(x => !visitedCorners.Contains(x) && !cube.CornerToLetter(x).Equals("A") && !cube.CornerToLetter(x).Equals("E") && !cube.CornerToLetter(x).Equals("R")))
             {
                 var skipIteration = false;
 

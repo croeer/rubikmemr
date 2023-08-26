@@ -88,6 +88,38 @@ namespace rubikmemr.Tests
             Assert.AreEqual("Q", meme);
         }
 
+        [Test]
+        public void Flipped_Corner_A_Test()
+        {
+            var initialState = new Color[,] {
+                { Color.blue, Color.yellow, Color.yellow,
+                  Color.yellow, Color.yellow, Color.green,
+                  Color.yellow, Color.red, Color.yellow},
+                { Color.orange, Color.blue, Color.blue,
+                  Color.blue, Color.blue, Color.blue,
+                  Color.blue, Color.blue, Color.blue},
+                { Color.red, Color.yellow, Color.red,
+                  Color.red, Color.red, Color.red,
+                  Color.red, Color.red, Color.white},
+                { Color.green, Color.yellow, Color.green,
+                  Color.green, Color.green, Color.green,
+                  Color.red, Color.green, Color.green},
+                { Color.orange, Color.orange, Color.yellow,
+                  Color.orange, Color.orange, Color.orange,
+                  Color.orange, Color.orange, Color.orange},
+                { Color.white, Color.white, Color.green,
+                  Color.white, Color.white, Color.white,
+                  Color.white, Color.white, Color.white}
+            };
+            // turn "KP"
+            var cube = new rubikmemr.Cube(initialState);
+
+            var solver = new Solver(cube);
+            var meme = solver.SolveCorners();
+
+            Assert.AreEqual("PK", meme);
+        }
+
 
         [Test]
         public void Reverse_Meme_BD_Test()
