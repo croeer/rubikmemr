@@ -173,7 +173,7 @@ namespace rubikmemr.Tests
             var solver = new Solver(cube);
             var meme = solver.SolveEdges();
 
-            Assert.AreEqual("AQCIDEFLGXHRJPKUNTOVSW", meme);
+            Assert.AreEqual("DEAQCIFLGXHRJPKUNTOVSW", meme);
         }
 
         [Test]
@@ -252,9 +252,12 @@ namespace rubikmemr.Tests
             var edgeMeme = solver.SolveEdges();
             var cornerMeme = solver.SolveCorners();
 
-            Assert.AreEqual("XEWUQOFHJNC", edgeMeme);
-            Assert.AreEqual("XPQDCLO", cornerMeme);
-            Assert.IsTrue(solver.Parity);
+            Assert.AreEqual("XEWUQOFHJNCI", edgeMeme, "edges failed");
+            Assert.AreEqual("XPQDCLOC", cornerMeme, "corners failed");
+            Assert.IsFalse(solver.Parity);
+
+            var fullMeme = new Solver(cube).Solve();
+            Assert.AreEqual("XEWUQOFHJNCI.XPQDCLOC", fullMeme, "full meme failed");
         }
 
         [Test]
@@ -265,7 +268,7 @@ namespace rubikmemr.Tests
             var solver = new Solver(cube);
             var meme = solver.SolveEdges();
 
-            Assert.AreEqual("SIRFEXOPNKA", meme);
+            Assert.AreEqual("SIRFAEXOPNKA", meme);
         }
 
         [Test]

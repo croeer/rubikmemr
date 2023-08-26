@@ -146,6 +146,11 @@
                     // get other starting piece
                     aktEdge = GetUnsolvedEdge();
                 }
+                else if(cube.IsEdgeFlipped(aktEdge))
+                {
+                    edgeMeme.Push("D");
+                    visitedEdges.Add(cube.InverseEdge(aktEdge));
+                }
                 else
                 {
                     edgeMeme.Push("D");
@@ -158,8 +163,11 @@
                 if (aktEdge is null)
                     break;
 
+                if (cube.IsEdgeFlipped(aktEdge))
+                    continue;
+
                 var letter = cube.EdgeToLetter(aktEdge);
-                cornerMeme.Push(letter);
+                edgeMeme.Push(letter);
                 aktEdge = cube.LetterToEdge(letter);
 
             } while (true);

@@ -1035,6 +1035,37 @@ namespace rubikmemr.Tests
             Assert.IsTrue(cube.IsEdgeSolved(cube.LetterToEdge("X")));
 
         }
+
+        [Test]
+        public void Flipped_Edge_IsFlipped_Test()
+        {
+
+            var initialState = new Color[,] {
+                { Color.yellow, Color.yellow, Color.yellow,
+                  Color.yellow, Color.yellow, Color.green,
+                  Color.yellow, Color.red, Color.yellow},
+                { Color.blue, Color.blue, Color.blue,
+                  Color.blue, Color.blue, Color.blue,
+                  Color.blue, Color.blue, Color.blue},
+                { Color.red, Color.yellow, Color.red,
+                  Color.red, Color.red, Color.red,
+                  Color.red, Color.red, Color.red},
+                { Color.green, Color.yellow, Color.green,
+                  Color.green, Color.green, Color.green,
+                  Color.green, Color.green, Color.green},
+                { Color.orange, Color.orange, Color.orange,
+                  Color.orange, Color.orange, Color.orange,
+                  Color.orange, Color.orange, Color.orange},
+                { Color.white, Color.white, Color.white,
+                  Color.white, Color.white, Color.white,
+                  Color.white, Color.white, Color.white}
+            };
+
+            var cube = new rubikmemr.Cube(initialState);
+
+            Assert.IsTrue(cube.IsEdgeFlipped(cube.LetterToEdge("B")));
+            Assert.IsTrue(cube.IsEdgeFlipped(cube.LetterToEdge("C")));
+        }
         #endregion
     }
 }

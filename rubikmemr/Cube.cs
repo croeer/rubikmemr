@@ -201,6 +201,18 @@ namespace rubikmemr
             return true;
         }
 
+        public bool IsEdgeFlipped(Edge edge)
+        {
+            var color1 = this.State[(int)edge.position1.face, edge.position1.index];
+            var color2 = this.State[(int)edge.position2.face, edge.position2.index];
+            
+            if (color1 == edge.color2 && color2 == edge.color1)
+            {
+                return true;
+            }
+            return false;
+        }
+
         #endregion
 
         /// <summary>
