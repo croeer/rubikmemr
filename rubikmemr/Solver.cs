@@ -200,7 +200,7 @@
             do
             {
                 visitedEdges.Add(aktEdge);
-                visitedEdges.Add(cube.InverseEdge(aktEdge));
+                //visitedEdges.Add(cube.InverseEdge(aktEdge));
 
                 var letter = cube.EdgeToLetter(aktEdge);
 

@@ -201,6 +201,7 @@ namespace rubikmemr.Tests
                   Color.white, Color.white, Color.white}
             };
 
+            // same as turning "CI"
             var cube = new rubikmemr.Cube(initialState);
 
             var solver = new Solver(cube);
@@ -233,13 +234,13 @@ namespace rubikmemr.Tests
                   Color.white, Color.white, Color.white,
                   Color.white, Color.white, Color.white}
             };
-
+            // T-Perm
             var cube = new rubikmemr.Cube(initialState);
 
             var solver = new Solver(cube);
             var meme = solver.SolveEdges();
 
-            Assert.AreEqual("ACD", meme);
+            Assert.AreEqual("DACD", meme);
         }
 
         [Test]
@@ -264,7 +265,7 @@ namespace rubikmemr.Tests
             var solver = new Solver(cube);
             var meme = solver.SolveEdges();
 
-            Assert.AreEqual("SIRFAEXOPNK", meme);
+            Assert.AreEqual("SIRFEXOPNKA", meme);
         }
 
         [Test]
